@@ -4,10 +4,10 @@ import {MyPosts} from "./MyPosts/MyPosts";
 
 export const Profile = () => {
     return (
-        <div className={s.content}>
+        <div>
             <div>
                 <img
-                    src='https://catherineasquithgallery.com/uploads/posts/2021-02/1612791335_1-p-goluboi-les-fon-2.jpg'/>
+                    src='https://www.hydrotech-group.com/files/gallery/news/pexels-photo-108055.jpeg'/>
             </div>
             <div>
                 ava + description
