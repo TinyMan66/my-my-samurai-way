@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
 import {state} from "./redux/state";
-import {renderEntireTree} from "./render";
+import {rerenderEntireTree} from "./render";
 
-renderEntireTree(state);
+rerenderEntireTree(state);

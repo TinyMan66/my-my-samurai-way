@@ -1,4 +1,4 @@
-import {renderEntireTree} from "../render";
+import {rerenderEntireTree} from "../render";
 
 export type SidebarType = {
     friends: Array<DialogType>
@@ -23,6 +23,7 @@ export type PostType = {
 
 export type ProfilePageType = {
     posts: Array<PostType>
+    newPostText: string
 }
 
 export type DialogPageType = {
@@ -44,7 +45,8 @@ export let state: RootStateType = {
             {id: 4, message: 'Good luck!', likeCounts: 35},
             {id: 5, message: 'Good luck!', likeCounts: 8},
             {id: 6, message: 'Good luck!', likeCounts: 8},
-        ]
+        ],
+        newPostText: ''
     },
     dialogPage: {
         dialogs: [
@@ -93,12 +95,19 @@ export let state: RootStateType = {
     },
 }
 
-export const addPost = (postMessage: string) => {
+export const addPost = () => {
     const newPost: PostType = {
-            id: new Date().getTime(),
-            message: postMessage,
-            likeCounts: 0
-        };
+        id: new Date().getTime(),
+        message: state.profilePage.newPostText,
+        likeCounts: 0
+    };
     state.profilePage.posts.push(newPost);
-    renderEntireTree(state);
+    // state.profilePage.newPostText = ''; the same as 106 string lower
+    updateNewPostText('');
+    rerenderEntireTree(state);
+}
+
+export const updateNewPostText = (newText: string) => {
+    state.profilePage.newPostText = newText;
+    rerenderEntireTree(state);
 }
