@@ -1,4 +1,3 @@
-import {rerenderEntireTree} from "../render";
 
 export type SidebarType = {
     friends: Array<DialogType>
@@ -34,6 +33,10 @@ export type RootStateType = {
     profilePage: ProfilePageType
     dialogPage: DialogPageType
     sidebar: SidebarType
+}
+
+let rerenderEntireTree = () => {
+    console.log('hello');
 }
 
 export let state: RootStateType = {
@@ -104,10 +107,14 @@ export const addPost = () => {
     state.profilePage.posts.push(newPost);
     // state.profilePage.newPostText = ''; the same as 106 string lower
     updateNewPostText('');
-    rerenderEntireTree(state);
+    rerenderEntireTree();
 }
 
 export const updateNewPostText = (newText: string) => {
     state.profilePage.newPostText = newText;
-    rerenderEntireTree(state);
+    rerenderEntireTree();
+}
+
+export const subscribe = (observer: () => void) => {
+    rerenderEntireTree = observer;
 }
