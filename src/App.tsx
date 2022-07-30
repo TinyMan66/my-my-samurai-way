@@ -7,17 +7,16 @@ import {Dialogs} from "./Components/Dialogs/Dialogs";
 import {News} from "./Components/News/News";
 import {Music} from "./Components/Music/Music";
 import {Settings} from "./Components/Settings/Settings";
-import {RootStateType} from "./redux/state";
+import {StoreType} from "./redux/state";
 import {Sidebar} from "./Components/Sidebar/Sidebar";
 import {Route} from "react-router-dom";
 
 type AppPropsType = {
-    state: RootStateType
-    addPost: () => void
-    updateNewPostText: (newText: string) => void
+    store: StoreType
 }
 
-const App = (props: AppPropsType) => {
+const App: React.FC<AppPropsType> = (props) => {
+    const state = props.store.getState();
     return (
         <div className='app-wrapper'>
             <Header/>
@@ -25,18 +24,18 @@ const App = (props: AppPropsType) => {
             <div className='app-wrapper-content'>
                 <Route path='/profile' render={() =>
                     <Profile
-                        addPostCallback={props.addPost}
-                        profilePageState={props.state.profilePage}
-                        updateNewPostText={props.updateNewPostText}
+                        addPostCallback={props.store.addPost.bind(props.store)}
+                        profilePageState={state.profilePage}
+                        updateNewPostText={props.store.updateNewPostText.bind(props.store)}
                     />}
                 />
                 <Route path='/dialogs' render={() =>
-                    <Dialogs state={props.state.dialogPage}/>
+                    <Dialogs state={state.dialogPage}/>
                 }/>
                 <Route path='/news' render={News}/>
                 <Route path='/music' render={Music}/>
                 <Route path='/settings' render={Settings}/>
-                <Route path='/sidebar' render={() => <Sidebar state={props.state.sidebar}/>}/>
+                <Route path='/sidebar' render={() => <Sidebar state={state.sidebar}/>}/>
             </div>
         </div>
     );
