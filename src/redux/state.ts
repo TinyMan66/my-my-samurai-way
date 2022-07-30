@@ -1,12 +1,21 @@
 
 export type StoreType = {
     _state: RootStateType
-    callSubscriber: () => void
-    addPost: () => void
-    updateNewPostText: (newText: string) => void
-    subscribe: (observer: () => void) => void
+    _callSubscriber: () => void
     getState: () => RootStateType
+    subscribe: (observer: () => void) => void
+    _updateNewPostText: (newText: string) => void
+    dispatch: (action: ActionTypes) => void
 }
+type AddPostActionType = {
+    type: 'ADD-POST'
+}
+type UpdateNewPostText = {
+    type: 'UPDATE-NEW-POST-TEXT'
+    newText: string
+}
+export type ActionTypes = AddPostActionType | UpdateNewPostText
+
 export const store: StoreType = {
     _state: {
         profilePage: {
@@ -66,28 +75,34 @@ export const store: StoreType = {
             ]
         },
     },
-    callSubscriber () {
+    _callSubscriber () {
         console.log('state changed');
     },
-    addPost () {
-        const newPost: PostType = {
-            id: new Date().getTime(),
-            message: this._state.profilePage.newPostText,
-            likeCounts: 0
-        };
-        this._state.profilePage.posts.push(newPost);
-        this.updateNewPostText('');
-        this.callSubscriber();
-    },
-    updateNewPostText (newText: string) {
-        this._state.profilePage.newPostText = newText;
-        this.callSubscriber();
-    },
-    subscribe (observer: () => void) {
-        this.callSubscriber = observer;
-    },
+
     getState () {
         return this._state;
+    },
+    subscribe (observer: () => void) {
+        this._callSubscriber = observer;
+    },
+
+    _updateNewPostText (newText: string) {
+        this._state.profilePage.newPostText = newText;
+        this._callSubscriber();
+    },
+    dispatch (action) {
+        if(action.type === 'ADD-POST'){
+            const newPost: PostType = {
+                id: new Date().getTime(),
+                message: this._state.profilePage.newPostText,
+                likeCounts: 0
+            };
+            this._state.profilePage.posts.push(newPost);
+            this._updateNewPostText('');
+            this._callSubscriber();
+        } else if (action.type === 'UPDATE-NEW-POST-TEXT'){
+            this._updateNewPostText(action.newText)
+        }
     }
 }
 

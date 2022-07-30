@@ -24,9 +24,8 @@ const App: React.FC<AppPropsType> = (props) => {
             <div className='app-wrapper-content'>
                 <Route path='/profile' render={() =>
                     <Profile
-                        addPostCallback={props.store.addPost.bind(props.store)}
                         profilePageState={state.profilePage}
-                        updateNewPostText={props.store.updateNewPostText.bind(props.store)}
+                        dispatch={props.store.dispatch.bind(props.store)}
                     />}
                 />
                 <Route path='/dialogs' render={() =>
