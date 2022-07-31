@@ -29,7 +29,7 @@ const App: React.FC<AppPropsType> = (props) => {
                     />}
                 />
                 <Route path='/dialogs' render={() =>
-                    <Dialogs state={state.dialogPage}/>
+                    <Dialogs store={props.store}/>
                 }/>
                 <Route path='/news' render={News}/>
                 <Route path='/music' render={Music}/>

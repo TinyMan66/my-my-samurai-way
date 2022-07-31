@@ -8,13 +8,19 @@ export type StoreType = {
     dispatch: (action: ActionTypes) => void
 }
 
-export type ActionTypes = ReturnType<typeof addPostActionCreator> | ReturnType<typeof addUpdateNewPostTextActionCreator>
+export type ActionTypes = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPostTextActionCreator> | ReturnType<typeof updateNewMessageBodyActionCreator> | ReturnType<typeof sendMessageActionCreator>
 
 export const addPostActionCreator  = () => (
     {type: 'ADD-POST'} as const);
 
-export const addUpdateNewPostTextActionCreator = (newText: string) => (
-    { type: "UPDATE-NEW-POST-TEXT", newText: newText } as const );
+export const updateNewPostTextActionCreator = (newText: string) => (
+    { type: 'UPDATE-NEW-POST-TEXT', newText: newText } as const );
+
+export const updateNewMessageBodyActionCreator = (body: string) => (
+    {type: 'UPDATE-NEW-MESSAGE-BODY', body: body} as const);
+
+export const sendMessageActionCreator = () => (
+    {type: 'SEND-MESSAGE' } as const);
 
 export const store: StoreType = {
     _state: {
@@ -33,26 +39,10 @@ export const store: StoreType = {
             dialogs: [
                 {id: 1, name: 'Eliza', avatar: 'https://online.pubhtml5.com/ipnc/accountlogo.jpg'},
                 {id: 2, name: 'Donnie', avatar: 'https://www.pngkit.com/png/detail/563-5631413_donnie-thornberry.png'},
-                {
-                    id: 3,
-                    name: 'Nigel',
-                    avatar: 'https://static.life.ru/posts/2018/08/1145040/108af72f8b30a38d26c2b21678759672.jpg'
-                },
-                {
-                    id: 4,
-                    name: 'Darwin',
-                    avatar: 'https://i.pinimg.com/originals/66/20/ed/6620ede81fa149c03873b00f04cddeff.png'
-                },
-                {
-                    id: 5,
-                    name: 'Marianne',
-                    avatar: 'https://m.media-amazon.com/images/M/MV5BZDM5OWE2ODYtNDFkOS00NGQ2LWJjZDMtMWUzM2JlYzI4ODQ2XkEyXkFqcGdeQXVyNTM3MDMyMDQ@._V1_FMjpg_UX1000_.jpg'
-                },
-                {
-                    id: 6,
-                    name: 'Debbie',
-                    avatar: 'https://i.pinimg.com/originals/92/62/74/9262747b5bdd21bc739cd687c74a29af.png'
-                },
+                {id: 3, name: 'Nigel', avatar: 'https://static.life.ru/posts/2018/08/1145040/108af72f8b30a38d26c2b21678759672.jpg'},
+                {id: 4, name: 'Darwin', avatar: 'https://i.pinimg.com/originals/66/20/ed/6620ede81fa149c03873b00f04cddeff.png'},
+                {id: 5, name: 'Marianne', avatar: 'https://m.media-amazon.com/images/M/MV5BZDM5OWE2ODYtNDFkOS00NGQ2LWJjZDMtMWUzM2JlYzI4ODQ2XkEyXkFqcGdeQXVyNTM3MDMyMDQ@._V1_FMjpg_UX1000_.jpg'},
+                {id: 6, name: 'Debbie', avatar: 'https://i.pinimg.com/originals/92/62/74/9262747b5bdd21bc739cd687c74a29af.png'},
             ],
             messages: [
                 {id: 1, message: 'Hi'},
@@ -61,7 +51,8 @@ export const store: StoreType = {
                 {id: 4, message: 'Good luck!'},
                 {id: 5, message: 'Good luck!'},
                 {id: 6, message: 'Good luck!'},
-            ]
+            ],
+            newMessageBody: ""
         },
         sidebar: {
             friends: [
@@ -91,7 +82,7 @@ export const store: StoreType = {
         this._callSubscriber();
     },
     dispatch (action) {
-        if(action.type === 'ADD-POST'){
+        if(action.type === 'ADD-POST') {
             const newPost: PostType = {
                 id: new Date().getTime(),
                 message: this._state.profilePage.newPostText,
@@ -100,8 +91,16 @@ export const store: StoreType = {
             this._state.profilePage.posts.push(newPost);
             this._updateNewPostText('');
             this._callSubscriber();
-        } else if (action.type === 'UPDATE-NEW-POST-TEXT'){
-            this._updateNewPostText(action.newText)
+        } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
+            this._updateNewPostText(action.newText);
+        } else if (action.type === 'UPDATE-NEW-MESSAGE-BODY') {
+            this._state.dialogPage.newMessageBody = action.body;
+            this._callSubscriber();
+        } else if (action.type === 'SEND-MESSAGE') {
+            let body = this._state.dialogPage.newMessageBody;
+            this._state.dialogPage.newMessageBody = '';
+            this._state.dialogPage.messages.push({id:6, message: body});
+            this._callSubscriber();
         }
     }
 }
@@ -135,6 +134,7 @@ export type ProfilePageType = {
 export type DialogPageType = {
     dialogs: Array<DialogType>
     messages: Array<MessageType>
+    newMessageBody: string
 }
 
 export type RootStateType = {
