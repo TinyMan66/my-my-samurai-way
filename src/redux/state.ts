@@ -1,3 +1,6 @@
+import dialogsReducer, {DialogsActionCreatorTypes} from "./dialogs-reducer";
+import profileReducer, {ProfileActionCreatorTypes} from "./profile-reducer";
+import sidebarReducer from "./sidebar-reducer";
 
 export type StoreType = {
     _state: RootStateType
@@ -8,19 +11,21 @@ export type StoreType = {
     dispatch: (action: ActionTypes) => void
 }
 
-export type ActionTypes = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPostTextActionCreator> | ReturnType<typeof updateNewMessageBodyActionCreator> | ReturnType<typeof sendMessageActionCreator>
+// export type ActionTypes = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPostTextActionCreator> | ReturnType<typeof updateNewMessageBodyActionCreator> | ReturnType<typeof sendMessageActionCreator>
 
-export const addPostActionCreator  = () => (
-    {type: 'ADD-POST'} as const);
+export type ActionTypes = ProfileActionCreatorTypes | DialogsActionCreatorTypes
 
-export const updateNewPostTextActionCreator = (newText: string) => (
-    { type: 'UPDATE-NEW-POST-TEXT', newText: newText } as const );
-
-export const updateNewMessageBodyActionCreator = (body: string) => (
-    {type: 'UPDATE-NEW-MESSAGE-BODY', body: body} as const);
-
-export const sendMessageActionCreator = () => (
-    {type: 'SEND-MESSAGE' } as const);
+// export const addPostActionCreator  = () => (
+//     {type: 'ADD-POST'} as const);
+//
+// export const updateNewPostTextActionCreator = (newText: string) => (
+//     { type: 'UPDATE-NEW-POST-TEXT', newText: newText } as const );
+//
+// export const updateNewMessageBodyActionCreator = (body: string) => (
+//     {type: 'UPDATE-NEW-MESSAGE-BODY', body: body} as const);
+//
+// export const sendMessageActionCreator = () => (
+//     {type: 'SEND-MESSAGE' } as const);
 
 export const store: StoreType = {
     _state: {
@@ -82,26 +87,32 @@ export const store: StoreType = {
         this._callSubscriber();
     },
     dispatch (action) {
-        if(action.type === 'ADD-POST') {
-            const newPost: PostType = {
-                id: new Date().getTime(),
-                message: this._state.profilePage.newPostText,
-                likeCounts: 0
-            };
-            this._state.profilePage.posts.push(newPost);
-            this._updateNewPostText('');
-            this._callSubscriber();
-        } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
-            this._updateNewPostText(action.newText);
-        } else if (action.type === 'UPDATE-NEW-MESSAGE-BODY') {
-            this._state.dialogPage.newMessageBody = action.body;
-            this._callSubscriber();
-        } else if (action.type === 'SEND-MESSAGE') {
-            let body = this._state.dialogPage.newMessageBody;
-            this._state.dialogPage.newMessageBody = '';
-            this._state.dialogPage.messages.push({id:6, message: body});
-            this._callSubscriber();
-        }
+        // if(action.type === 'ADD-POST') {
+        //     const newPost: PostType = {
+        //         id: new Date().getTime(),
+        //         message: this._state.profilePage.newPostText,
+        //         likeCounts: 0
+        //     };
+        //     this._state.profilePage.posts.push(newPost);
+        //     this._updateNewPostText('');
+        //     this._callSubscriber();
+        // } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
+        //     this._updateNewPostText(action.newText);
+        // } else if (action.type === 'UPDATE-NEW-MESSAGE-BODY') {
+        //     this._state.dialogPage.newMessageBody = action.body;
+        //     this._callSubscriber();
+        // } else if (action.type === 'SEND-MESSAGE') {
+        //     let body = this._state.dialogPage.newMessageBody;
+        //     this._state.dialogPage.newMessageBody = '';
+        //     this._state.dialogPage.messages.push({id:6, message: body});
+        //     this._callSubscriber();
+        // }
+
+        this._state.dialogPage = dialogsReducer(this._state.dialogPage, action as DialogsActionCreatorTypes );
+        this._state.profilePage = profileReducer(this._state.profilePage, action as ProfileActionCreatorTypes);
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action);
+        //
+        this._callSubscriber();
     }
 }
 
