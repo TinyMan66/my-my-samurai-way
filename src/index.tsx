@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import {store} from "./redux/state";
+import {store} from "./redux/store";
 import ReactDOM from "react-dom";
 import {BrowserRouter} from "react-router-dom";
 import App from "./App";
@@ -14,3 +14,8 @@ export const rerenderEntireTree = () => {
 }
 rerenderEntireTree();
 store.subscribe(rerenderEntireTree);
+
+// store.subscribe(() => {
+//     let state = store.getState();
+//     rerenderEntireTree(state)
+// });

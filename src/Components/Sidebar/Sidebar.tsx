@@ -1,6 +1,6 @@
 import React from 'react';
 import s from './Sidebar.module.css';
-import {SidebarType} from "../../redux/state";
+import {SidebarType} from "../../redux/store";
 import {NavLink} from "react-router-dom";
 
 type SidebarPropsType = {
@@ -8,7 +8,7 @@ type SidebarPropsType = {
 }
 
 export const Sidebar = (props: SidebarPropsType) => {
-    let sidebarElement = props.state.friends.map(f => <div> <img src={f.avatar}/> {f.name} </div>);
+    let sidebarElement = props.state.friends.map(f => <div> <img src={f.avatar} alt={'avatar picture'}/> {f.name} </div>);
 
     return (
         <div className={s.friends}>
