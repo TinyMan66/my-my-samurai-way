@@ -1,13 +1,13 @@
 import React, {ChangeEvent} from "react";
 import s from './MyPosts.module.css'
 import {Post} from "./Post/Post";
-import {ActionTypes, PostType} from "../../../redux/store";
-import {addPostActionCreator, updateNewPostTextActionCreator} from "../../../redux/profile-reducer";
+import {PostType} from "../../../redux/store";
 
 type MyPostsPropsType = {
     newPostText: string
     myPosts: Array<PostType>
-    dispatch: (action: ActionTypes) => void
+    addPost: () => void
+    updateNewPostText: (newText: string) => void
 }
 
 export const MyPosts = (props: MyPostsPropsType) => {
@@ -20,12 +20,12 @@ export const MyPosts = (props: MyPostsPropsType) => {
         />);
 
     const addPostHandler = () => {
-        props.dispatch(addPostActionCreator());
+        props.addPost();
     }
 
     const newPostChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        let text = e.currentTarget.value;
-        props.dispatch(updateNewPostTextActionCreator(text));
+        let newText = e.currentTarget.value;
+        props.updateNewPostText(newText);
     }
 
     return (

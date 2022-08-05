@@ -2,7 +2,6 @@ import {DialogPageType} from "./store";
 
 export type DialogsActionCreatorTypes = ReturnType<typeof updateNewMessageBodyActionCreator> | ReturnType<typeof sendMessageActionCreator>
 
-
 export const updateNewMessageBodyActionCreator = (body: string) => (
     {type: 'UPDATE-NEW-MESSAGE-BODY', body: body} as const);
 

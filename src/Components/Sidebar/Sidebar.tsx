@@ -8,7 +8,7 @@ type SidebarPropsType = {
 }
 
 export const Sidebar = (props: SidebarPropsType) => {
-    let sidebarElement = props.state.friends.map(f => <div> <img src={f.avatar} alt={'avatar picture'}/> {f.name} </div>);
+    let sidebarElement = props.state.friends.map(f => <div> <img src={f.avatar} alt={'avatar'}/> {f.name} </div>);
 
     return (
         <div className={s.friends}>

@@ -3,13 +3,13 @@ import './App.css';
 import {Header} from "./Components/Header/Header";
 import {Navbar} from "./Components/Navbar/Navbar";
 import {Profile} from "./Components/Profile/Profile";
-import {Dialogs} from "./Components/Dialogs/Dialogs";
 import {News} from "./Components/News/News";
 import {Music} from "./Components/Music/Music";
 import {Settings} from "./Components/Settings/Settings";
 import {StoreType} from "./redux/store";
 import {Sidebar} from "./Components/Sidebar/Sidebar";
 import {Route} from "react-router-dom";
+import {DialogsContainer} from "./Components/Dialogs/Message/DialogsContainer";
 
 type AppPropsType = {
     store: StoreType
@@ -23,13 +23,10 @@ const App: React.FC<AppPropsType> = (props) => {
             <Navbar/>
             <div className='app-wrapper-content'>
                 <Route path='/profile' render={() =>
-                    <Profile
-                        profilePageState={state.profilePage}
-                        dispatch={props.store.dispatch.bind(props.store)}
-                    />}
+                    <Profile store={props.store}/>}
                 />
                 <Route path='/dialogs' render={() =>
-                    <Dialogs store={props.store}/>
+                    <DialogsContainer store={props.store}/>
                 }/>
                 <Route path='/news' render={News}/>
                 <Route path='/music' render={Music}/>
