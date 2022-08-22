@@ -1,5 +1,4 @@
 import React from 'react'
-import {ProfilePageType} from "./store";
 
 export type ProfileActionCreatorTypes = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPostTextActionCreator>
 
@@ -9,6 +8,16 @@ export const addPostActionCreator  = () => (
 export const updateNewPostTextActionCreator = (newText: string) => (
     { type: 'UPDATE-NEW-POST-TEXT', newText: newText } as const );
 
+export type PostType = {
+    id: number
+    message: string
+    likeCounts: number
+}
+
+// export type NewPostTextType = string;
+
+export type initialStateType = typeof initialState;
+
 let initialState = {
     posts: [
         {id: 1, message: 'Hi, how are you?', likeCounts: 15},
@@ -17,11 +26,11 @@ let initialState = {
         {id: 4, message: 'Good luck!', likeCounts: 35},
         {id: 5, message: 'Good luck!', likeCounts: 8},
         {id: 6, message: 'Good luck!', likeCounts: 8},
-    ],
-    newPostText: ''
+    ] as Array<PostType>,
+    newPostText: '' as string
 }
 
-const profileReducer = (state: ProfilePageType = initialState, action: ProfileActionCreatorTypes):ProfilePageType => {
+const profileReducer = (state: initialStateType = initialState, action: ProfileActionCreatorTypes): initialStateType => {
     switch (action.type){
         case 'ADD-POST':
             let newPost = {

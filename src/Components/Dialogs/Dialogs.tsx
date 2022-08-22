@@ -2,17 +2,11 @@ import React, {ChangeEvent} from 'react';
 import s from './Dialogs.module.css';
 import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
-import {DialogPageType} from "../../redux/store";
-
-type DialogsPropsType = {
-    dialogPage: DialogPageType
-    sendMessage: () => void
-    updateNewMessageBody: (body: string) => void
-}
+import {DialogsPropsType} from "./Message/DialogsContainer";
 
 export const Dialogs = (props: DialogsPropsType) => {
 
-    const state = props.dialogPage;
+    const state = props.dialogsPage;
 
     const dialogsElements = state.dialogs.map(d => <DialogItem key={d.id} avatar={d.avatar} name={d.name} id={d.id}/>);
     const massagesElements = state.messages.map(m => <Message key={m.id} message={m.message}/>);

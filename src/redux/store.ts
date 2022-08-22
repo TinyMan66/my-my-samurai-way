@@ -85,18 +85,18 @@ export type SidebarType = {
     friends: Array<DialogType>
 }
 
-export type MessageType = {
+type MessageType = {
     id: number
     message: string
 }
 
-export type DialogType = {
+type DialogType = {
     id: number
     name: string
     avatar: string
 }
 
-export type PostType = {
+type PostType = {
     id: number
     message: string
     likeCounts: number
