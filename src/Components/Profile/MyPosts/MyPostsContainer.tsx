@@ -37,7 +37,6 @@ import {Dispatch} from "redux";
 //         </StoreContext.Consumer>
 //     )
 // }
-//
 
 type mapStatePropsType = {
     posts: Array<PostType>
