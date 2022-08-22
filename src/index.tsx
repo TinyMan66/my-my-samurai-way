@@ -7,24 +7,23 @@ import App from "./App";
 import {Provider} from "react-redux";
 import {store} from "./redux/redux-store";
 
+// export const rerenderEntireTree = () => {
+//     ReactDOM.render(
+//         <BrowserRouter>
+//             <Provider store={store}>
+//                 <App/>
+//             </Provider>
+//         </BrowserRouter>, document.getElementById('root')
+//     );
+// }
+// rerenderEntireTree();
+//
+// store.subscribe(rerenderEntireTree);
 
-export const rerenderEntireTree = () => {
-    ReactDOM.render(
-        <BrowserRouter>
-            <Provider store={store}>
-                <App/>
-            </Provider>
-        </BrowserRouter>, document.getElementById('root')
-    );
-}
-rerenderEntireTree();
-
-store.subscribe(rerenderEntireTree);
-
-// ReactDOM.render(
-//     <BrowserRouter>
-//         <Provider store={store}>
-//             <App/>
-//         </Provider>
-//     </BrowserRouter>, document.getElementById('root')
-// );
+ReactDOM.render(
+    <BrowserRouter>
+        <Provider store={store}>
+            <App/>
+        </Provider>
+    </BrowserRouter>, document.getElementById('root')
+);
