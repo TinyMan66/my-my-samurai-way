@@ -9,12 +9,9 @@ import {Settings} from "./Components/Settings/Settings";
 import {Sidebar} from "./Components/Sidebar/Sidebar";
 import {Route} from "react-router-dom";
 import {DialogsContainer} from "./Components/Dialogs/Message/DialogsContainer";
+import {UsersContainer} from "./Components/Users/UsersContainer";
 
-// type AppPropsType = {
-//     store: StoreType
-// }
 
-// const App: React.FC<AppPropsType> = (props) => {
 const App = () => {
     // const state = props.store.getState();
     return (
@@ -23,18 +20,18 @@ const App = () => {
             <Navbar/>
             <div className='app-wrapper-content'>
                 <Route path='/profile' render={() =>
-                    // <Profile store={props.store}/>}
-                    <Profile />}
+                    <Profile/>}
                 />
                 <Route path='/dialogs' render={() =>
-                    // <DialogsContainer store={props.store}/>
                     <DialogsContainer/>
+                }/>
+                <Route path='/users' render={() =>
+                    <UsersContainer/>
                 }/>
                 <Route path='/news' render={News}/>
                 <Route path='/music' render={Music}/>
                 <Route path='/settings' render={Settings}/>
                 <Route path='/sidebar' render={() =>
-                    // <Sidebar state={state.sidebar}/>
                     <Sidebar />
                 }/>
             </div>
