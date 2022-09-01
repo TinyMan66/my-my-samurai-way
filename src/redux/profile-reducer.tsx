@@ -1,6 +1,8 @@
 import React from 'react'
 
-export type ProfileActionCreatorTypes = ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPostTextActionCreator>
+export type ProfileActionCreatorTypes =
+    ReturnType<typeof addPostActionCreator>
+    | ReturnType<typeof updateNewPostTextActionCreator>
 
 export const addPostActionCreator  = () => (
     {type: 'ADD-POST'} as const);
