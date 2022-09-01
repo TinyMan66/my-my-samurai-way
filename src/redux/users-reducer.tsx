@@ -16,9 +16,13 @@ export const setUsersAC = (user: Array<UserType>) => (
 
 export type UserType = {
     id: number
-    avatar: string
+    // avatar: string
+    photos: {
+        small: string
+        large: string
+    }
     followed: boolean
-    fullName: string
+    name: string
     status: string
     location: {
         city: string,

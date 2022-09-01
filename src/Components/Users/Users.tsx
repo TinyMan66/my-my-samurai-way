@@ -1,37 +1,15 @@
 import React from 'react';
 import styles from './Users.module.css'
 import {UsersPropsType} from "./UsersContainer";
+// import * as axios from "axios";
+import userIcon from '../../assets/images/user_icon.png'
+import axios from "axios";
 
 export const Users = (props: UsersPropsType) => {
     if (props.users.length === 0) {
-        props.setUsers(
-            [
-                {
-                    id: 1,
-                    avatar: 'https://online.pubhtml5.com/ipnc/accountlogo.jpg',
-                    followed: false,
-                    fullName: 'Eliza',
-                    status: 'I\'m not fine',
-                    location: {city: 'Moscow', country: 'Russia'}
-                },
-                {
-                    id: 2,
-                    avatar: 'https://www.pngkit.com/png/detail/563-5631413_donnie-thornberry.png',
-                    followed: true,
-                    fullName: 'Donnie',
-                    status: 'Looking for a job..',
-                    location: {city: 'Vancouver', country: 'Canada'}
-                },
-                {
-                    id: 3,
-                    avatar: 'https://static.life.ru/posts/2018/08/1145040/108af72f8b30a38d26c2b21678759672.jpg',
-                    followed: true,
-                    fullName: 'Nigel',
-                    status: 'I am a boss',
-                    location: {city: 'Portland', country: 'USA'}
-                }
-            ]
-        )
+        axios.get("https://social-network.samuraijs.com/api/1.0/users").then(response => {
+            props.setUsers(response.data.items)
+        })
     }
 
     return (
@@ -40,7 +18,8 @@ export const Users = (props: UsersPropsType) => {
                 props.users.map(u => <div key={u.id}>
                     <span>
                         <div>
-                            <img className={styles.usersAvatar} src={u.avatar} alt={'user\'s avatar'}/>
+                            <img className={styles.usersAvatar} src={u.photos.small !== null ? u.photos.small : userIcon}
+                                 alt={'user\'s avatar'}/>
                         </div>
                         <div>
                             {u.followed
@@ -55,12 +34,12 @@ export const Users = (props: UsersPropsType) => {
                     </span>
                     <span>
                         <span>
-                            <div>{u.fullName}</div>
+                            <div>{u.name}</div>
                             <div>{u.status}</div>
                         </span>
                         <span>
-                            <div>{u.location.country}</div>
-                            <div>{u.location.city}</div>
+                            <div>{"u.location.country"}</div>
+                            <div>{"u.location.city"}</div>
                         </span>
                     </span>
                 </div>)
