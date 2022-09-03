@@ -4,6 +4,8 @@ export type UsersActionCreatorTypes =
     ReturnType<typeof followAC>
     | ReturnType<typeof unfollowAC>
     | ReturnType<typeof setUsersAC>
+    | ReturnType<typeof setCurrentPageAC>
+    | ReturnType<typeof setUsersTotalCountAC>
 
 export const followAC = (id: number) => (
     {type: 'FOLLOW', userID: id} as const);
@@ -13,6 +15,13 @@ export const unfollowAC = (id: number) => (
 
 export const setUsersAC = (user: Array<UserType>) => (
     {type: 'SET-USERS', user} as const);
+
+export const setCurrentPageAC = (currentPage: number) => (
+    {type: 'SET-CURRENT-PAGE', currentPage} as const);
+
+export const setUsersTotalCountAC = (totalUsersCount: number) => (
+    {type: 'SET-USERS-TOTAL-COUNT', totalUsersCount} as const);
+
 
 export type UserType = {
     id: number
@@ -28,6 +37,7 @@ export type UserType = {
         city: string,
         country: string
     }
+    // totalCount: number
 }
 
 // export type NewPostTextType = string;
@@ -35,33 +45,10 @@ export type UserType = {
 export type initialStateType = typeof initialState;
 
 let initialState = {
-    // users: [
-    //     {
-    //         id: 1,
-    //         avatar: 'https://online.pubhtml5.com/ipnc/accountlogo.jpg',
-    //         followed: false,
-    //         fullName: 'Eliza',
-    //         status: 'I\'m not fine',
-    //         location: {city: 'Moscow', country: 'Russia'}
-    //     },
-    //     {
-    //         id: 2,
-    //         avatar: 'https://www.pngkit.com/png/detail/563-5631413_donnie-thornberry.png',
-    //         followed: true,
-    //         fullName: 'Donnie',
-    //         status: 'Looking for a job..',
-    //         location: {city: 'Vancouver', country: 'Canada'}
-    //     },
-    //     {
-    //         id: 3,
-    //         avatar: 'https://static.life.ru/posts/2018/08/1145040/108af72f8b30a38d26c2b21678759672.jpg',
-    //         followed: true,
-    //         fullName: 'Nigel',
-    //         status: 'I am a boss',
-    //         location: {city: 'Portland', country: 'USA'}
-    //     },
-    // ] as Array<UserType>
-    users: [] as Array<UserType>
+    users: [] as Array<UserType>,
+    pageSize: 5,
+    totalUsersCount: 0,
+    currentPage: 3
 }
 
 const usersReducer = (state: initialStateType = initialState, action: UsersActionCreatorTypes): initialStateType => {
@@ -79,7 +66,17 @@ const usersReducer = (state: initialStateType = initialState, action: UsersActio
         case 'SET-USERS':
             return {
                 ...state,
-                users: [...state.users, ...action.user]
+                users: action.user
+            }
+        case 'SET-CURRENT-PAGE':
+            return {
+                ...state,
+                currentPage: action.currentPage
+            }
+        case 'SET-USERS-TOTAL-COUNT':
+            return {
+                ...state,
+                totalUsersCount: action.totalUsersCount
             }
         default:
             return state;
