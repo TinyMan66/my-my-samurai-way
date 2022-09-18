@@ -9,7 +9,8 @@ import {Settings} from "./Components/Settings/Settings";
 import {Sidebar} from "./Components/Sidebar/Sidebar";
 import {Route} from "react-router-dom";
 import {DialogsContainer} from "./Components/Dialogs/Message/DialogsContainer";
-import {UsersContainer} from "./Components/Users/UsersContainer";
+import UsersContainer from "./Components/Users/UsersContainer";
+
 
 
 const App = () => {
