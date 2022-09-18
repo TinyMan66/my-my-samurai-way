@@ -25,7 +25,6 @@ export const setUsersTotalCountAC = (totalUsersCount: number) => (
 
 export type UserType = {
     id: number
-    // avatar: string
     photos: {
         small: string
         large: string
@@ -37,7 +36,6 @@ export type UserType = {
         city: string,
         country: string
     }
-    // totalCount: number
 }
 
 // export type NewPostTextType = string;
@@ -48,7 +46,7 @@ let initialState = {
     users: [] as Array<UserType>,
     pageSize: 5,
     totalUsersCount: 0,
-    currentPage: 3
+    currentPage: 1
 }
 
 const usersReducer = (state: initialStateType = initialState, action: UsersActionCreatorTypes): initialStateType => {
