@@ -1,11 +1,12 @@
 import React from 'react';
 import {AppStateType} from "../../redux/redux-store";
 import {
-    followAC,
-    setCurrentPageAC,
-    setUsersAC,
-    setUsersTotalCountAC, toggleIsFetchingAC,
-    unfollowAC,
+    follow,
+    setCurrentPage,
+    setUsers,
+    setUsersTotalCount,
+    toggleIsFetching,
+    unfollow,
     UserType
 } from "../../redux/users-reducer";
 import {Users} from "./Users";
@@ -27,7 +28,7 @@ type mapDispatchPropsType = {
     unfollow: (userID: number) => void
     setUsers: (users: Array<UserType>) => void
     setCurrentPage: (currentPage: number) => void
-    setTotalUsersCount: (totalCount: number) => void
+    setUsersTotalCount: (totalCount: number) => void
     toggleIsFetching: (isFetching: boolean) => void
 }
 
@@ -41,7 +42,7 @@ class UsersContainer extends React.Component<UsersPropsType> {
             .then(response => {
                 this.props.toggleIsFetching(false);
                 this.props.setUsers(response.data.items)
-                this.props.setTotalUsersCount(response.data.totalCount);
+                this.props.setUsersTotalCount(response.data.totalCount);
             });
     }
 
@@ -59,12 +60,12 @@ class UsersContainer extends React.Component<UsersPropsType> {
         return <>
             {this.props.isFetching ? <Preloader/> : null}
             <Users users={this.props.users}
-                         follow={this.props.follow}
-                         unfollow={this.props.unfollow}
-                         pageSize={this.props.pageSize}
-                         currentPage={this.props.currentPage}
-                         totalUsersCount={this.props.totalUsersCount}
-                         onPageChange={this.onPageChange}
+                   follow={this.props.follow}
+                   unfollow={this.props.unfollow}
+                   pageSize={this.props.pageSize}
+                   currentPage={this.props.currentPage}
+                   totalUsersCount={this.props.totalUsersCount}
+                   onPageChange={this.onPageChange}
             />
         </>
     }
@@ -102,11 +103,11 @@ const mapStateToProps = (state: AppStateType) => {
 //     }
 // }
 
-export default connect (mapStateToProps, {
-    follow: followAC,
-    unfollow: unfollowAC,
-    setUsers: setUsersAC,
-    setCurrentPage: setCurrentPageAC,
-    setTotalUsersCount: setUsersTotalCountAC,
-    toggleIsFetching: toggleIsFetchingAC
-}) (UsersContainer);
+export default connect(mapStateToProps, {
+    follow,
+    unfollow,
+    setUsers,
+    setCurrentPage,
+    setUsersTotalCount,
+    toggleIsFetching
+})(UsersContainer);
