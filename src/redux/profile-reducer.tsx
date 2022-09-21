@@ -3,6 +3,7 @@ import React from 'react'
 export type ProfileActionCreatorTypes =
     ReturnType<typeof addPostActionCreator>
     | ReturnType<typeof updateNewPostTextActionCreator>
+    | ReturnType<typeof setUserProfile>
 
 export const addPostActionCreator  = () => (
     {type: 'ADD-POST'} as const);
@@ -10,13 +11,35 @@ export const addPostActionCreator  = () => (
 export const updateNewPostTextActionCreator = (newText: string) => (
     { type: 'UPDATE-NEW-POST-TEXT', newText: newText } as const );
 
+export const setUserProfile = (profile: ProfileType) => (
+    { type: 'SET-USER-PROFILE', profile } as const );
+
 export type PostType = {
     id: number
     message: string
     likeCounts: number
 }
 
-// export type NewPostTextType = string;
+export type ProfileType = {
+    userId: number
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
+    contacts: {
+        github: string
+        vk: string
+        facebook: string
+        instagram: string
+        twitter: string
+        website: string
+        youtube: string
+        mainLink: string
+    }
+    photos: {
+        small: string
+        large: string
+    }
+}
 
 export type initialStateType = typeof initialState;
 
@@ -29,7 +52,8 @@ let initialState = {
         {id: 5, message: 'Good luck!', likeCounts: 8},
         {id: 6, message: 'Good luck!', likeCounts: 8},
     ] as Array<PostType>,
-    newPostText: '' as string
+    newPostText: '' as string,
+    profile: {} as ProfileType
 }
 
 const profileReducer = (state: initialStateType = initialState, action: ProfileActionCreatorTypes): initialStateType => {
@@ -51,6 +75,11 @@ const profileReducer = (state: initialStateType = initialState, action: ProfileA
                 newPostText: action.newText
             }
         }
+        case 'SET-USER-PROFILE':
+            return {
+                ...state,
+                profile: action.profile
+            }
         default:
             return state;
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from "./Users.module.css";
 import userIcon from "../../assets/images/user_icon.png";
 import {UserType} from "../../redux/users-reducer";
+import {NavLink} from "react-router-dom";
 
 // import * as axios from "axios";
 
@@ -28,7 +29,9 @@ export const Users = (props: UsersPropsType) => {
             <div>
                 {pages.map(p => {
                     return <span className={props.currentPage === p ? styles.selectedPage : ""}
-                                 onClick={(e) => {props.onPageChange(p)}}
+                                 onClick={(e) => {
+                                     props.onPageChange(p)
+                                 }}
                     >{p}</span>
                 })}
             </div>
@@ -36,9 +39,11 @@ export const Users = (props: UsersPropsType) => {
                 props.users.map(u => <div key={u.id}>
                     <span>
                         <div>
-                            <img className={styles.usersAvatar}
-                                 src={u.photos.small !== null ? u.photos.small : userIcon}
-                                 alt={'user\'s avatar'}/>
+                            <NavLink to={'/profile/' + u.id}>
+                                <img className={styles.usersAvatar}
+                                     src={u.photos.small !== null ? u.photos.small : userIcon}
+                                     alt={'user\'s avatar'}/>
+                            </NavLink>
                         </div>
                         <div>
                             {u.followed
