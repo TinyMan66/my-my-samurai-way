@@ -71,7 +71,7 @@ class UsersContainer extends React.Component<UsersPropsType> {
     }
 }
 
-const mapStateToProps = (state: AppStateType) => {
+const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
         users: state.usersPage.users,
         pageSize: state.usersPage.pageSize,
@@ -80,7 +80,7 @@ const mapStateToProps = (state: AppStateType) => {
         isFetching: state.usersPage.isFetching
     }
 }
-// const mapDispatchToProps = (dispatch: Dispatch) => {
+// const mapDispatchToProps = (dispatch: Dispatch): mapDispatchPropsType => {
 //     return {
 //         follow: (userID: number) => {
 //             dispatch(followAC(userID));
