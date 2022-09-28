@@ -43,7 +43,7 @@ export type ProfileType = {
 
 export type initialStateType = typeof initialState;
 
-let initialState = {
+const initialState = {
     posts: [
         {id: 1, message: 'Hi, how are you?', likeCounts: 15},
         {id: 2, message: 'It\'s my first post', likeCounts: 8},
@@ -52,8 +52,27 @@ let initialState = {
         {id: 5, message: 'Good luck!', likeCounts: 8},
         {id: 6, message: 'Good luck!', likeCounts: 8},
     ] as Array<PostType>,
-    newPostText: '' as string,
-    profile: {} as ProfileType
+    newPostText: "" ,
+    profile: {
+        userId: NaN,
+        lookingForAJob: false,
+        lookingForAJobDescription: '',
+        fullName: '',
+        contacts: {
+            github: '',
+            vk: '',
+            facebook: '',
+            instagram: '',
+            twitter: '',
+            website: '',
+            youtube: '',
+            mainLink: '',
+        },
+        photos: {
+            small: '',
+            large: ''
+        }
+    }
 }
 
 const profileReducer = (state: initialStateType = initialState, action: ProfileActionCreatorTypes): initialStateType => {
