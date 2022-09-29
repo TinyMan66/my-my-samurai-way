@@ -37,7 +37,7 @@ export type UserType = {
     name: string
     status: string
     location: {
-        city: string,
+        city: string
         country: string
     }
 }
