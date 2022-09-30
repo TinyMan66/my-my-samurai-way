@@ -13,7 +13,7 @@ type UsersPropsType = {
     pageSize: number
     currentPage: number
     follow: (id: number) => void
-    unfollow: (userID: number) => void
+    unfollow: (id: number) => void
     onPageChange: (pageNumber: number) => void
 }
 
@@ -49,7 +49,7 @@ export const Users = (props: UsersPropsType) => {
                         <div>
                             {u.followed
                                 ? <button onClick={() => {
-                                    axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
+                                    axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,{
                                         withCredentials: true,
                                         headers: {
                                             "API-KEY": "ccd72c64-da46-4e68-ace8-41333a566ebf"
@@ -62,7 +62,7 @@ export const Users = (props: UsersPropsType) => {
                                         });
                                 }}>Unfollow</button>
                                 : <button onClick={() => {
-                                    axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
+                                    axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
                                         withCredentials: true,
                                         headers: {
                                             "API-KEY": "ccd72c64-da46-4e68-ace8-41333a566ebf"
