@@ -27,8 +27,8 @@ export const setUsersTotalCount = (totalUsersCount: number) => (
 export const toggleIsFetching = (isFetching: boolean) => (
     {type: 'TOGGLE-IS-FETCHING', isFetching} as const);
 
-export const toggleFollowingProgress = (inProgress: boolean) => (
-    {type: 'TOGGLE-IS-FOLLOWING-IN-PROGRESS', inProgress} as const);
+export const toggleFollowingProgress = (inProgress: boolean, userId: number) => (
+    {type: 'TOGGLE-IS-FOLLOWING-IN-PROGRESS', inProgress, userId} as const);
 
 
 export type UserType = {
@@ -46,8 +46,6 @@ export type UserType = {
     }
 }
 
-// export type NewPostTextType = string;
-
 export type initialStateType = typeof initialState;
 
 let initialState = {
@@ -56,7 +54,7 @@ let initialState = {
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,
-    followingInProgress: false
+    followingInProgress: [] as number[]
 }
 
 const usersReducer = (state: initialStateType = initialState, action: UsersActionCreatorTypes): initialStateType => {
@@ -91,10 +89,12 @@ const usersReducer = (state: initialStateType = initialState, action: UsersActio
                 ...state,
                 isFetching: action.isFetching
             }
-            case 'TOGGLE-IS-FOLLOWING-IN-PROGRESS':
+        case 'TOGGLE-IS-FOLLOWING-IN-PROGRESS':
             return {
                 ...state,
                 followingInProgress: action.inProgress
+                    ? [...state.followingInProgress, action.userId]
+                    : state.followingInProgress.filter(id => id !== action.userId)
             }
         default:
             return state;

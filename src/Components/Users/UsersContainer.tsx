@@ -15,14 +15,13 @@ import {Preloader} from "../common/Preloader/Preloader";
 import {usersAPI} from "../../api/api";
 
 
-
 type mapStatePropsType = {
     users: Array<UserType>
     pageSize: number
     totalUsersCount: number
     currentPage: number
     isFetching: boolean
-    followingInProgress: boolean
+    followingInProgress: number[]
 }
 
 type mapDispatchPropsType = {
@@ -32,7 +31,7 @@ type mapDispatchPropsType = {
     setCurrentPage: (currentPage: number) => void
     setUsersTotalCount: (totalCount: number) => void
     toggleIsFetching: (isFetching: boolean) => void
-    toggleFollowingProgress: (inProgress: boolean) => void
+    toggleFollowingProgress: (inProgress: boolean, userId: number) => void
 }
 
 export type UsersPropsType = mapStatePropsType & mapDispatchPropsType;
@@ -42,19 +41,19 @@ class UsersContainer extends React.Component<UsersPropsType> {
     componentDidMount() {
         this.props.toggleIsFetching(true);
         usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
-                this.props.toggleIsFetching(false);
-                this.props.setUsers(data.items)
-                this.props.setUsersTotalCount(data.totalCount);
-            });
+            this.props.toggleIsFetching(false);
+            this.props.setUsers(data.items)
+            this.props.setUsersTotalCount(data.totalCount);
+        });
     }
 
     onPageChange = (pageNumber: number) => {
         this.props.setCurrentPage(pageNumber);
         this.props.toggleIsFetching(true);
         usersAPI.getUsers(pageNumber, this.props.pageSize).then(data => {
-                this.props.toggleIsFetching(false);
-                this.props.setUsers(data.items);
-            });
+            this.props.toggleIsFetching(false);
+            this.props.setUsers(data.items);
+        });
     }
 
     render() {
