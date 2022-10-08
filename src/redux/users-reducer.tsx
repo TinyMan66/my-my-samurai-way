@@ -32,7 +32,7 @@ export const toggleIsFetching = (isFetching: boolean) => (
 export const toggleFollowingProgress = (inProgress: boolean, userId: number) => (
     {type: 'TOGGLE-IS-FOLLOWING-IN-PROGRESS', inProgress, userId} as const);
 
-export const getUsersThunkCreator = (currentPage: number, pageSize: number) => {
+export const getUsers = (currentPage: number, pageSize: number) => {
     return (dispatch: Dispatch<UsersActionCreatorTypes>) => {
         dispatch(toggleIsFetching(true));
         usersAPI.getUsers(currentPage, pageSize).then(data => {
