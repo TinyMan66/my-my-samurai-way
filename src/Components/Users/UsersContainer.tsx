@@ -1,7 +1,7 @@
 import React from 'react';
 import {AppStateType} from "../../redux/redux-store";
 import {
-    follow,
+    follow, getUsersThunkCreator,
     setCurrentPage,
     setUsers,
     setUsersTotalCount, toggleFollowingProgress,
@@ -32,6 +32,7 @@ type mapDispatchPropsType = {
     setUsersTotalCount: (totalCount: number) => void
     toggleIsFetching: (isFetching: boolean) => void
     toggleFollowingProgress: (inProgress: boolean, userId: number) => void
+    getUsersThunkCreator: (currentPage: number, pageSize: number) => void
 }
 
 export type UsersPropsType = mapStatePropsType & mapDispatchPropsType;
@@ -39,12 +40,7 @@ export type UsersPropsType = mapStatePropsType & mapDispatchPropsType;
 class UsersContainer extends React.Component<UsersPropsType> {
 
     componentDidMount() {
-        this.props.toggleIsFetching(true);
-        usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
-            this.props.toggleIsFetching(false);
-            this.props.setUsers(data.items)
-            this.props.setUsersTotalCount(data.totalCount);
-        });
+        this.props.getUsersThunkCreator(this.props.currentPage, this.props.pageSize)
     }
 
     onPageChange = (pageNumber: number) => {
@@ -91,5 +87,6 @@ export default connect(mapStateToProps, {
     setCurrentPage,
     setUsersTotalCount,
     toggleIsFetching,
-    toggleFollowingProgress
+    toggleFollowingProgress,
+    getUsersThunkCreator
 })(UsersContainer);

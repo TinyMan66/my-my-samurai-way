@@ -1,4 +1,6 @@
 import React from 'react'
+import {usersAPI} from "../api/api";
+import {Dispatch} from "redux";
 
 export type UsersActionCreatorTypes =
     ReturnType<typeof follow>
@@ -30,6 +32,16 @@ export const toggleIsFetching = (isFetching: boolean) => (
 export const toggleFollowingProgress = (inProgress: boolean, userId: number) => (
     {type: 'TOGGLE-IS-FOLLOWING-IN-PROGRESS', inProgress, userId} as const);
 
+export const getUsersThunkCreator = (currentPage: number, pageSize: number) => {
+    return (dispatch: Dispatch<UsersActionCreatorTypes>) => {
+        dispatch(toggleIsFetching(true));
+        usersAPI.getUsers(currentPage, pageSize).then(data => {
+            dispatch(toggleIsFetching(false));
+            dispatch(setUsers(data.items))
+            dispatch(setUsersTotalCount(data.totalCount));
+        });
+    }
+}
 
 export type UserType = {
     id: number
