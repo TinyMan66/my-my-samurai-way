@@ -7,7 +7,7 @@ export type AuthActionCreatorTypes = ReturnType<typeof setAuthUserData>
 export const setAuthUserData = (userId: number, email: string, login: string) => (
     {type: 'SET-USER-DATA', data: {userId, email, login}} as const);
 
-export const authUser = () => {
+export const getAuthUser = () => {
     return (dispatch: Dispatch<AuthActionCreatorTypes>) => {
         authAPI.authUser().then(data => {
             if (data.resultCode === 0) {
@@ -34,6 +34,7 @@ export type initialStateType = typeof initialState;
 
 let initialState = {
     data: {
+        // NaN and "" is not right!! it must be null, need to fix!!
         userId: NaN,
         email: "",
         login: ""
