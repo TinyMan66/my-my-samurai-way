@@ -18,6 +18,10 @@ export const usersAPI = {
     },
     follow(id: number = 1) {
         return instance.post(`follow/${id}`)
+    },
+    authUser() {
+        return instance.get(`auth/me`)
+            .then(response => response.data);
     }
 }
 
