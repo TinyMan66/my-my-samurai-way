@@ -15,7 +15,7 @@ export const ProfileInfo = ({profile}: ProfilePropsType) => {
                     <img src='https://abc-decor.com/img/gallery/4/thumbs/thumb_l_nus_10425.jpg' alt={'forest'}/>
                 </div>
                 <div className={s.descriptionBlock}>
-                     <img src={profile.photos.large} alt={"profile photo"}/>
+                     <img src={profile.photos.large} alt={"profile photo "}/>
                     ava + description
                 </div>
             </div>
