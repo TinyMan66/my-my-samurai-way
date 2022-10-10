@@ -1,4 +1,6 @@
 import React from 'react'
+import {Dispatch} from "redux";
+import {usersAPI} from "../api/api";
 
 export type ProfileActionCreatorTypes =
     ReturnType<typeof addPostActionCreator>
@@ -13,6 +15,13 @@ export const updateNewPostTextActionCreator = (newText: string) => (
 
 export const setUserProfile = (profile: ProfileType) => (
     { type: 'SET-USER-PROFILE', profile } as const );
+
+export const getUserProfile = (userId: number) => {
+    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
+        usersAPI.getUserProfile(userId)
+            .then(data => {dispatch(setUserProfile(data))});
+    }
+}
 
 export type PostType = {
     id: number
@@ -54,7 +63,8 @@ const initialState = {
     ] as Array<PostType>,
     newPostText: "" ,
     profile: {
-        userId: NaN,
+        //NaN and 0 - are not good, it must be null, but typeScript against it now - must be resolve!!!
+        userId: 0,
         lookingForAJob: false,
         lookingForAJobDescription: '',
         fullName: '',
