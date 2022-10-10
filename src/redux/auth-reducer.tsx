@@ -1,6 +1,6 @@
 import React from 'react'
 import {Dispatch} from "redux";
-import {usersAPI} from "../api/api";
+import {authAPI} from "../api/api";
 
 export type AuthActionCreatorTypes = ReturnType<typeof setAuthUserData>
 
@@ -9,7 +9,7 @@ export const setAuthUserData = (userId: number, email: string, login: string) =>
 
 export const authUser = () => {
     return (dispatch: Dispatch<AuthActionCreatorTypes>) => {
-        usersAPI.authUser().then(data => {
+        authAPI.authUser().then(data => {
             if (data.resultCode === 0) {
                 let {id, email, login} = data.data;
                 dispatch(setAuthUserData(id, email, login))
