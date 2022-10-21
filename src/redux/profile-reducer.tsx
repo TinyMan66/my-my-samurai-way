@@ -1,25 +1,51 @@
 import React from 'react'
 import {Dispatch} from "redux";
-import {usersAPI} from "../api/api";
+import {profileAPI, usersAPI} from "../api/api";
 
 export type ProfileActionCreatorTypes =
     ReturnType<typeof addPostActionCreator>
     | ReturnType<typeof updateNewPostTextActionCreator>
     | ReturnType<typeof setUserProfile>
+    | ReturnType<typeof setStatus>
 
-export const addPostActionCreator  = () => (
+export const addPostActionCreator = () => (
     {type: 'ADD-POST'} as const);
 
 export const updateNewPostTextActionCreator = (newText: string) => (
-    { type: 'UPDATE-NEW-POST-TEXT', newText: newText } as const );
+    {type: 'UPDATE-NEW-POST-TEXT', newText: newText} as const);
 
 export const setUserProfile = (profile: ProfileType) => (
-    { type: 'SET-USER-PROFILE', profile } as const );
+    {type: 'SET-USER-PROFILE', profile} as const);
+
+export const setStatus = (status: string) => (
+    {type: 'SET-STATUS', status} as const);
 
 export const getUserProfile = (userId: number) => {
     return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
         usersAPI.getUserProfile(userId)
-            .then(data => {dispatch(setUserProfile(data))});
+            .then(data => {
+                dispatch(setUserProfile(data))
+            });
+    }
+}
+
+export const getStatus = (userId: number) => {
+    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
+        profileAPI.getStatus(userId)
+            .then(response => {
+                dispatch(setStatus(response.data))
+            });
+    }
+}
+
+export const updateStatus = (status: string) => {
+    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
+        profileAPI.updateStatus(status)
+            .then(response => {
+                if(response.data.resultCide === 0) {
+                    dispatch(setStatus(status))
+                }
+            });
     }
 }
 
@@ -61,7 +87,7 @@ const initialState = {
         {id: 5, message: 'Good luck!', likeCounts: 8},
         {id: 6, message: 'Good luck!', likeCounts: 8},
     ] as Array<PostType>,
-    newPostText: "" ,
+    newPostText: "",
     profile: {
         //NaN and 0 - are not good, it must be null, but typeScript against it now - must be resolve!!!
         userId: 0,
@@ -82,11 +108,12 @@ const initialState = {
             small: '',
             large: ''
         }
-    }
+    },
+    status: ""
 }
 
 const profileReducer = (state: initialStateType = initialState, action: ProfileActionCreatorTypes): initialStateType => {
-    switch (action.type){
+    switch (action.type) {
         case 'ADD-POST':
             let newPost = {
                 id: new Date().getTime(),
@@ -108,6 +135,11 @@ const profileReducer = (state: initialStateType = initialState, action: ProfileA
             return {
                 ...state,
                 profile: action.profile
+            }
+        case 'SET-STATUS':
+            return {
+                ...state,
+                status: action.status
             }
         default:
             return state;
