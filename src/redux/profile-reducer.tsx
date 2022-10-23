@@ -42,7 +42,7 @@ export const updateStatus = (status: string) => {
     return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
         profileAPI.updateStatus(status)
             .then(response => {
-                if(response.data.resultCide === 0) {
+                if(response.data.resultCode === 0) {
                     dispatch(setStatus(status))
                 }
             });
