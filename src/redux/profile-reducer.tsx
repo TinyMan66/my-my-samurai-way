@@ -4,15 +4,11 @@ import {profileAPI, usersAPI} from "../api/api";
 
 export type ProfileActionCreatorTypes =
     ReturnType<typeof addPostActionCreator>
-    | ReturnType<typeof updateNewPostTextActionCreator>
     | ReturnType<typeof setUserProfile>
     | ReturnType<typeof setStatus>
 
-export const addPostActionCreator = () => (
-    {type: 'ADD-POST'} as const);
-
-export const updateNewPostTextActionCreator = (newText: string) => (
-    {type: 'UPDATE-NEW-POST-TEXT', newText: newText} as const);
+export const addPostActionCreator = (newPostText: string) => (
+    {type: 'ADD-POST', newPostText} as const);
 
 export const setUserProfile = (profile: ProfileType) => (
     {type: 'SET-USER-PROFILE', profile} as const);
@@ -117,7 +113,7 @@ const profileReducer = (state: initialStateType = initialState, action: ProfileA
         case 'ADD-POST':
             let newPost = {
                 id: new Date().getTime(),
-                message: state.newPostText,
+                message: action.newPostText,
                 likeCounts: 0
             };
             return {
@@ -125,12 +121,6 @@ const profileReducer = (state: initialStateType = initialState, action: ProfileA
                 posts: [...state.posts, newPost],
                 newPostText: ''
             }
-        case 'UPDATE-NEW-POST-TEXT': {
-            return {
-                ...state,
-                newPostText: action.newText
-            }
-        }
         case 'SET-USER-PROFILE':
             return {
                 ...state,
