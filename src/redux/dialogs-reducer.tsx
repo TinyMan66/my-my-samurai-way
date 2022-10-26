@@ -1,14 +1,9 @@
 import React from 'react'
 
-export type DialogsActionCreatorTypes =
-    ReturnType<typeof updateNewMessageBodyActionCreator>
-    | ReturnType<typeof sendMessageActionCreator>
+export type DialogsActionCreatorTypes = ReturnType<typeof sendMessageActionCreator>
 
-export const updateNewMessageBodyActionCreator = (body: string) => (
-    {type: 'UPDATE-NEW-MESSAGE-BODY', body: body} as const);
-
-export const sendMessageActionCreator = () => (
-    {type: 'SEND-MESSAGE' } as const);
+export const sendMessageActionCreator = (newMessageBody: string) => (
+    {type: 'SEND-MESSAGE', newMessageBody } as const);
 
 export type MessageType = {
     id: number
@@ -45,18 +40,10 @@ const initialState = {
 
 const dialogsReducer = (state: initialStateType = initialState, action: DialogsActionCreatorTypes): initialStateType => {
     switch (action.type) {
-        case 'UPDATE-NEW-MESSAGE-BODY':
-            return {
-                ...state,
-                newMessageBody: action.body
-            };
         case 'SEND-MESSAGE':
-            // let body = state.newMessageBody
-            // {id:6, message: body}
             return {...state,
-                messages: [...state.messages,
-                    {id:6, message: state.newMessageBody}],
-                newMessageBody: ''};
+                messages: [...state.messages, {id:6, message: action.newMessageBody}]
+            }
         default:
             return state;
     }
