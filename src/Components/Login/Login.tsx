@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {loginTC} from "../../redux/auth-reducer";
 import {Redirect} from "react-router-dom";
 import {AppStateType} from "../../redux/redux-store";
+import style from "../common/FormsControls/FormsControls.module.css"
 
 const mapStateToProps = (state: AppStateType): mapStatePropsType => ({
     isAuth: state.auth.isAuth
@@ -23,6 +24,8 @@ const LoginForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
             <div>
                 <Field component={Input} name={"rememberMe"} type={"checkbox"}/> Remember me
             </div>
+            {props.error && <div className={style.formSummaryError}>{props.error}</div>}
+
             <div>
                 <button>Login</button>
             </div>

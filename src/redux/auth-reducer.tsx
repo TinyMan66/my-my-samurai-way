@@ -1,13 +1,14 @@
-import React from 'react'
+import React from "react"
 import {Dispatch} from "redux";
 import {authAPI, meResponseDataType} from "../api/api";
+import {stopSubmit} from "redux-form";
 
 const initialState = {
     data: {
         // NaN and "" is not right!! it must be null, need to fix!!
         userId: null,
-        email: "",
-        login: ""
+        email: '',
+        login: ''
     } as meResponseDataType,
     isAuth: false
 }
@@ -47,6 +48,9 @@ export const loginTC = (email: string | null, password: string | null, rememberM
         .then(response => {
             if (response.data.resultCode === 0) {
                 dispatch(getAuthUserData())
+            } else {
+                let message = response.data.messages.length > 0 ? response.data.messages[0] : 'Some error';
+                dispatch(stopSubmit('login', {_error: message}))
             }
         })
 }
