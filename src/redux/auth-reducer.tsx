@@ -1,44 +1,14 @@
 import React from 'react'
 import {Dispatch} from "redux";
-import {authAPI} from "../api/api";
+import {authAPI, meResponseDataType} from "../api/api";
 
-export type AuthActionCreatorTypes = ReturnType<typeof setAuthUserData>
-
-export const setAuthUserData = (userId: number, email: string, login: string) => (
-    {type: 'SET-USER-DATA', data: {userId, email, login}} as const);
-
-export const getAuthUser = () => {
-    return (dispatch: Dispatch<AuthActionCreatorTypes>) => {
-        authAPI.authUser().then(data => {
-            if (data.resultCode === 0) {
-                let {id, email, login} = data.data;
-                dispatch(setAuthUserData(id, email, login))
-            }
-        })
-    }
-}
-
-export type DataAuthType = {
-    userId: number
-    email: string
-    login: string
-}
-
-// export type AuthType = {
-//     data: Array<DataAuthType>,
-//     resultCode: number | null,
-//     messages: Array<string>
-// }
-
-export type initialStateType = typeof initialState;
-
-let initialState = {
+const initialState = {
     data: {
         // NaN and "" is not right!! it must be null, need to fix!!
-        userId: NaN,
+        userId: null,
         email: "",
         login: ""
-    },
+    } as meResponseDataType,
     isAuth: false
 }
 
@@ -47,7 +17,7 @@ const authReducer = (state: initialStateType = initialState, action: AuthActionC
         case 'SET-USER-DATA':
             return {
                 ...state,
-                data: action.data,
+                ...action.payload,
                 isAuth: true
             }
         default:
@@ -55,3 +25,41 @@ const authReducer = (state: initialStateType = initialState, action: AuthActionC
     }
 }
 export default authReducer;
+
+// actions
+export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean) => (
+    {type: 'SET-USER-DATA', payload: {userId, email, login, isAuth}} as const);
+
+
+// thunks
+export const getAuthUserData = () => {
+    return (dispatch: Dispatch<AuthActionCreatorTypes>) => {
+        authAPI.me().then(data => {
+            if (data.resultCode === 0) {
+                let {userId, email, login} = data.data;
+                dispatch(setAuthUserData(userId, email, login, true))
+            }
+        })
+    }
+}
+
+export const loginTC = (email: string | null, password: string | null, rememberMe: boolean) => (dispatch: any) => {
+    authAPI.login(email, password, rememberMe)
+        .then(response => {
+            if (response.data.resultCode === 0) {
+                dispatch(getAuthUserData())
+            }
+        })
+}
+export const logoutTC = () => (dispatch: Dispatch<AuthActionCreatorTypes>) => {
+    authAPI.logout()
+        .then(response => {
+            if (response.data.resultCode === 0) {
+                dispatch(setAuthUserData(null, null, null, false))
+            }
+        })
+}
+
+// types
+export type initialStateType = typeof initialState;
+export type AuthActionCreatorTypes = ReturnType<typeof setAuthUserData>
