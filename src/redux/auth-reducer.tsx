@@ -32,22 +32,20 @@ export const setAuthUserData = (userId: number | null, email: string | null, log
 
 
 // thunks
-export const getAuthUserData = () => {
-    return (dispatch: Dispatch<AuthActionCreatorTypes>) => {
-        authAPI.me().then(data => {
-            if (data.resultCode === 0) {
-                let {userId, email, login} = data.data;
-                dispatch(setAuthUserData(userId, email, login, true))
-            }
-        })
-    }
+export const getAuthUserDataTC = () => (dispatch: Dispatch<AuthActionCreatorTypes>) => {
+    return authAPI.me().then(data => {
+        if (data.resultCode === 0) {
+            let {userId, email, login} = data.data;
+            dispatch(setAuthUserData(userId, email, login, true))
+        }
+    })
 }
 
 export const loginTC = (email: string | null, password: string | null, rememberMe: boolean) => (dispatch: any) => {
     authAPI.login(email, password, rememberMe)
         .then(response => {
             if (response.data.resultCode === 0) {
-                dispatch(getAuthUserData())
+                dispatch(getAuthUserDataTC())
             } else {
                 let message = response.data.messages.length > 0 ? response.data.messages[0] : 'Some error';
                 dispatch(stopSubmit('login', {_error: message}))
