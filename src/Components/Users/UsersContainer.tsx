@@ -2,7 +2,7 @@ import React from 'react';
 import {AppStateType} from "../../redux/redux-store";
 import {
     follow,
-    getUsers,
+    requestUsers,
     setCurrentPage,
     unfollow,
     UserType
@@ -11,6 +11,13 @@ import {Users} from "./Users";
 import {connect} from "react-redux";
 import {Preloader} from "../common/Preloader/Preloader";
 import {compose} from "redux";
+import {
+    getCurrentPage,
+    getFollowingInProgress, getIsFetching,
+    getPageSize,
+    getTotalUsersCount,
+    getUsers
+} from "../../redux/users-selectors";
 
 class UsersContainer extends React.Component<UsersPropsType> {
 
@@ -38,19 +45,29 @@ class UsersContainer extends React.Component<UsersPropsType> {
     }
 }
 
+// const mapStateToProps = (state: AppStateType): mapStatePropsType => {
+//     return {
+//         users: state.usersPage.users,
+//         pageSize: state.usersPage.pageSize,
+//         totalUsersCount: state.usersPage.totalUsersCount,
+//         currentPage: state.usersPage.currentPage,
+//         isFetching: state.usersPage.isFetching,
+//         followingInProgress: state.usersPage.followingInProgress
+//     }
+// }
 const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        followingInProgress: state.usersPage.followingInProgress
+        users: getUsers(state),
+        pageSize: getPageSize(state),
+        totalUsersCount: getTotalUsersCount(state),
+        currentPage: getCurrentPage(state),
+        isFetching: getIsFetching(state),
+        followingInProgress: getFollowingInProgress(state)
     }
 }
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, {setCurrentPage, getUsers, follow, unfollow})
+    connect(mapStateToProps, {setCurrentPage, getUsers: requestUsers, follow, unfollow})
 )(UsersContainer)
 
 // types
