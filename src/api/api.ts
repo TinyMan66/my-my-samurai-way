@@ -9,6 +9,7 @@ const instance = axios.create({
     }
 });
 
+// user
 export const usersAPI = {
     getUsers(currentPage: number = 1, pageSize: number = 10) {
         return instance.get(`users?page=${currentPage}&count=${pageSize}`)
@@ -26,6 +27,7 @@ export const usersAPI = {
     },
 }
 
+// profile
 export const profileAPI = {
     getUserProfile(userId: number) {
         return instance.get<ProfileType>(`profile/`+ userId)
@@ -35,10 +37,12 @@ export const profileAPI = {
         return instance.get(`profile/status/` + userId);
     },
     updateStatus(status: string) {
-        return instance.put(`profile/status`, {status: status});
+        debugger
+        return instance.put<ResponseType>(`profile/status`, {status: status});
     },
 }
 
+// auth
 export const authAPI = {
     me() {
         return instance.get<ResponseType<meResponseDataType>>(`auth/me`)

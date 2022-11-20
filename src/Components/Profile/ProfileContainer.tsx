@@ -7,26 +7,6 @@ import {RouteComponentProps, withRouter} from "react-router-dom";
 import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 
-type PathParamsType = {
-    userId: string | undefined
-}
-
-type mapStatePropsType = {
-    profile: ProfileType,
-    status: string
-    authorizedUserId: number | null
-    isAuth: boolean
-}
-type mapDispatchPropsType = {
-    getUserProfile: (userId: number) => void
-    getStatus: (userId: number) => void
-    updateStatus: (status: string) => void
-}
-
-type ProfileContainerPropsType = mapStatePropsType & mapDispatchPropsType;
-
-type PropsType = RouteComponentProps<PathParamsType> & ProfileContainerPropsType;
-
 class ProfileContainer extends React.Component<PropsType> {
     componentDidMount() {
         let userId = this.props.match.params.userId;
@@ -64,3 +44,21 @@ export default compose<React.ComponentType>(
     connect(mapStateToProps, {getUserProfile, getStatus, updateStatus}),
     withRouter
 )(ProfileContainer);
+
+// types
+type PathParamsType = {
+    userId: string | undefined
+}
+type mapStatePropsType = {
+    profile: ProfileType,
+    status: string
+    authorizedUserId: number | null
+    isAuth: boolean
+}
+type mapDispatchPropsType = {
+    getUserProfile: (userId: number) => void
+    getStatus: (userId: number) => void
+    updateStatus: (status: string) => void
+}
+type ProfileContainerPropsType = mapStatePropsType & mapDispatchPropsType;
+type PropsType = RouteComponentProps<PathParamsType> & ProfileContainerPropsType;

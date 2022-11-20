@@ -2,80 +2,6 @@ import React from 'react'
 import {Dispatch} from "redux";
 import {profileAPI, usersAPI} from "../api/api";
 
-export type ProfileActionCreatorTypes =
-    ReturnType<typeof addPostActionCreator>
-    | ReturnType<typeof setUserProfile>
-    | ReturnType<typeof setStatus>
-
-export const addPostActionCreator = (newPostText: string) => (
-    {type: 'ADD-POST', newPostText} as const);
-
-export const setUserProfile = (profile: ProfileType) => (
-    {type: 'SET-USER-PROFILE', profile} as const);
-
-export const setStatus = (status: string) => (
-    {type: 'SET-STATUS', status} as const);
-
-export const getUserProfile = (userId: number) => {
-    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
-        usersAPI.getUserProfile(userId)
-            .then(data => {
-                dispatch(setUserProfile(data))
-            });
-    }
-}
-
-export const getStatus = (userId: number) => {
-    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
-        profileAPI.getStatus(userId)
-            .then(response => {
-                dispatch(setStatus(response.data))
-            });
-    }
-}
-
-export const updateStatus = (status: string) => {
-    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
-        profileAPI.updateStatus(status)
-            .then(response => {
-                if(response.data.resultCode === 0) {
-                    dispatch(setStatus(status))
-                }
-            });
-    }
-}
-
-export type PostType = {
-    id: number
-    message: string
-    likeCounts: number
-}
-
-export type ProfileType = {
-    userId: number
-    lookingForAJob: boolean
-    lookingForAJobDescription: string
-    fullName: string
-    contacts: ContactsType
-    photos: {
-        small: string
-        large: string
-    }
-}
-
-type ContactsType = {
-    github: string
-    vk: string
-    facebook: string
-    instagram: string
-    twitter: string
-    website: string
-    youtube: string
-    mainLink: string
-}
-
-export type initialStateType = typeof initialState;
-
 const initialState = {
     posts: [
         {id: 1, message: 'Hi, how are you?', likeCounts: 15},
@@ -138,3 +64,76 @@ const profileReducer = (state: initialStateType = initialState, action: ProfileA
     }
 }
 export default profileReducer;
+
+// actions
+export const addPostActionCreator = (newPostText: string) => (
+    {type: 'ADD-POST', newPostText} as const);
+
+export const setUserProfile = (profile: ProfileType) => (
+    {type: 'SET-USER-PROFILE', profile} as const);
+
+export const setStatus = (status: string) => (
+    {type: 'SET-STATUS', status} as const);
+
+// thunks
+export const getUserProfile = (userId: number) => {
+    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
+        usersAPI.getUserProfile(userId)
+            .then(data => {
+                dispatch(setUserProfile(data))
+            });
+    }
+}
+
+export const getStatus = (userId: number) => {
+    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
+        profileAPI.getStatus(userId)
+            .then(response => {
+                dispatch(setStatus(response.data))
+            });
+    }
+}
+
+export const updateStatus = (status: string) => {
+    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
+        profileAPI.updateStatus(status)
+            .then(response => {
+                if(response.data.resultCode === 0) {
+                    dispatch(setStatus(status))
+                }
+            });
+    }
+}
+
+// types
+export type initialStateType = typeof initialState;
+export type PostType = {
+    id: number
+    message: string
+    likeCounts: number
+};
+export type ProfileType = {
+    userId: number
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
+    contacts: ContactsType
+    photos: {
+        small: string
+        large: string
+    }
+};
+type ContactsType = {
+    github: string
+    vk: string
+    facebook: string
+    instagram: string
+    twitter: string
+    website: string
+    youtube: string
+    mainLink: string
+};
+export type ProfileActionCreatorTypes =
+    ReturnType<typeof addPostActionCreator>
+    | ReturnType<typeof setUserProfile>
+    | ReturnType<typeof setStatus>
