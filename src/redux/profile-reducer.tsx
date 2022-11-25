@@ -1,6 +1,6 @@
 import React from 'react'
 import {Dispatch} from "redux";
-import {profileAPI, usersAPI} from "../api/api";
+import {profileAPI, ResultCodesEnum, usersAPI} from "../api/api";
 
 const initialState = {
     posts: [
@@ -59,6 +59,11 @@ const profileReducer = (state: initialStateType = initialState, action: ProfileA
                 ...state,
                 status: action.status
             }
+            case 'DELETE-POST':
+            return {
+                ...state,
+                posts: state.posts.filter(p => p.id !== action.postId)
+            }
         default:
             return state;
     }
@@ -74,6 +79,10 @@ export const setUserProfile = (profile: ProfileType) => (
 
 export const setStatus = (status: string) => (
     {type: 'SET-STATUS', status} as const);
+
+export const deletePostActionCreator = (postId: number) => (
+    {type: 'DELETE-POST', postId} as const);
+
 
 // thunks
 export const getUserProfile = (userId: number) => {
@@ -98,7 +107,7 @@ export const updateStatus = (status: string) => {
     return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
         profileAPI.updateStatus(status)
             .then(response => {
-                if(response.data.resultCode === 0) {
+                if(response.data.resultCode === ResultCodesEnum.Success) {
                     dispatch(setStatus(status))
                 }
             });
@@ -137,3 +146,4 @@ export type ProfileActionCreatorTypes =
     ReturnType<typeof addPostActionCreator>
     | ReturnType<typeof setUserProfile>
     | ReturnType<typeof setStatus>
+    | ReturnType<typeof deletePostActionCreator>
