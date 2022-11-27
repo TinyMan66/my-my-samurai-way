@@ -1,23 +1,5 @@
 import React from 'react'
 
-export type DialogsActionCreatorTypes = ReturnType<typeof sendMessageActionCreator>
-
-export const sendMessageActionCreator = (newMessageBody: string) => (
-    {type: 'SEND-MESSAGE', newMessageBody } as const);
-
-export type MessageType = {
-    id: number
-    message: string
-}
-
-export type DialogType = {
-    id: number
-    name: string
-    avatar: string
-}
-
-export type initialStateType = typeof initialState;
-
 const initialState = {
     dialogs: [
         {id: 1, name: 'Eliza', avatar: 'https://online.pubhtml5.com/ipnc/accountlogo.jpg'},
@@ -38,7 +20,7 @@ const initialState = {
     newMessageBody: ""
 }
 
-const dialogsReducer = (state: initialStateType = initialState, action: DialogsActionCreatorTypes): initialStateType => {
+const dialogsReducer = (state: initialStateType = initialState, action: DialogsActionTypes): initialStateType => {
     switch (action.type) {
         case 'SEND-MESSAGE':
             return {...state,
@@ -49,3 +31,20 @@ const dialogsReducer = (state: initialStateType = initialState, action: DialogsA
     }
 }
 export default dialogsReducer;
+
+// actions
+export const sendMessageActionCreator = (newMessageBody: string) => (
+    {type: 'SEND-MESSAGE', newMessageBody } as const);
+
+// types
+export type MessageType = {
+    id: number
+    message: string
+}
+export type DialogType = {
+    id: number
+    name: string
+    avatar: string
+}
+export type initialStateType = typeof initialState;
+export type DialogsActionTypes = ReturnType<typeof sendMessageActionCreator>

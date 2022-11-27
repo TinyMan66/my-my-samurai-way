@@ -1,6 +1,6 @@
 import React from 'react'
-import {Dispatch} from "redux";
 import {profileAPI, ResultCodesEnum, usersAPI} from "../api/api";
+import {AppThunk} from "./redux-store";
 
 const initialState = {
     posts: [
@@ -36,9 +36,9 @@ const initialState = {
     status: ""
 }
 
-const profileReducer = (state: initialStateType = initialState, action: ProfileActionCreatorTypes): initialStateType => {
+const profileReducer = (state: initialStateType = initialState, action: ProfileActionTypes): initialStateType => {
     switch (action.type) {
-        case 'ADD-POST':
+        case 'profile/ADD-POST':
             let newPost = {
                 id: new Date().getTime(),
                 message: action.newPostText,
@@ -49,17 +49,17 @@ const profileReducer = (state: initialStateType = initialState, action: ProfileA
                 posts: [...state.posts, newPost],
                 newPostText: ''
             }
-        case 'SET-USER-PROFILE':
+        case 'profile/SET-USER-PROFILE':
             return {
                 ...state,
                 profile: action.profile
             }
-        case 'SET-STATUS':
+        case 'profile/SET-STATUS':
             return {
                 ...state,
                 status: action.status
             }
-            case 'DELETE-POST':
+        case 'profile/DELETE-POST':
             return {
                 ...state,
                 posts: state.posts.filter(p => p.id !== action.postId)
@@ -72,45 +72,39 @@ export default profileReducer;
 
 // actions
 export const addPostActionCreator = (newPostText: string) => (
-    {type: 'ADD-POST', newPostText} as const);
+    {type: 'profile/ADD-POST', newPostText} as const);
 
 export const setUserProfile = (profile: ProfileType) => (
-    {type: 'SET-USER-PROFILE', profile} as const);
+    {type: 'profile/SET-USER-PROFILE', profile} as const);
 
 export const setStatus = (status: string) => (
-    {type: 'SET-STATUS', status} as const);
+    {type: 'profile/SET-STATUS', status} as const);
 
 export const deletePostActionCreator = (postId: number) => (
-    {type: 'DELETE-POST', postId} as const);
+    {type: 'profile/DELETE-POST', postId} as const);
 
 
 // thunks
-export const getUserProfile = (userId: number) => {
-    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
-        usersAPI.getUserProfile(userId)
-            .then(data => {
-                dispatch(setUserProfile(data))
-            });
+export const getUserProfile = (userId: number): AppThunk => {
+    return async (dispatch) => {
+        const data = await usersAPI.getUserProfile(userId);
+        dispatch(setUserProfile(data));
     }
 }
 
-export const getStatus = (userId: number) => {
-    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
-        profileAPI.getStatus(userId)
-            .then(response => {
-                dispatch(setStatus(response.data))
-            });
+export const getStatus = (userId: number): AppThunk => {
+    return async (dispatch) => {
+        const response = await profileAPI.getStatus(userId);
+        dispatch(setStatus(response.data));
     }
 }
 
-export const updateStatus = (status: string) => {
-    return (dispatch: Dispatch<ProfileActionCreatorTypes>) => {
-        profileAPI.updateStatus(status)
-            .then(response => {
-                if(response.data.resultCode === ResultCodesEnum.Success) {
-                    dispatch(setStatus(status))
-                }
-            });
+export const updateStatus = (status: string): AppThunk => {
+    return async (dispatch) => {
+        const response = await profileAPI.updateStatus(status);
+        if (response.data.resultCode === ResultCodesEnum.Success) {
+            dispatch(setStatus(status))
+        }
     }
 }
 
@@ -142,7 +136,7 @@ type ContactsType = {
     youtube: string
     mainLink: string
 };
-export type ProfileActionCreatorTypes =
+export type ProfileActionTypes =
     ReturnType<typeof addPostActionCreator>
     | ReturnType<typeof setUserProfile>
     | ReturnType<typeof setStatus>

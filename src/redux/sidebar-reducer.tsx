@@ -1,5 +1,5 @@
 import React from 'react';
-import {SidebarType} from "./store";
+import {DialogType} from "./dialogs-reducer";
 
 let initialState = {
     friends: [
@@ -18,3 +18,8 @@ const sidebarReducer = (state: SidebarType = initialState, action: any) => {
 };
 
 export default sidebarReducer;
+
+// types
+export type SidebarType = {
+    friends: Array<DialogType>
+}

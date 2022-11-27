@@ -1,11 +1,10 @@
 import React from "react"
-import {Dispatch} from "redux";
-import {authAPI, meResponseDataType} from "../api/api";
+import {authAPI, meResponseDataType, ResultCodesEnum} from "../api/api";
 import {stopSubmit} from "redux-form";
+import {AppThunk} from "./redux-store";
 
 const initialState = {
     data: {
-        // NaN and "" is not right!! it must be null, need to fix!!
         userId: null,
         email: '',
         login: ''
@@ -13,13 +12,10 @@ const initialState = {
     isAuth: false
 }
 
-const authReducer = (state: initialStateType = initialState, action: AuthActionCreatorTypes): initialStateType => {
+const authReducer = (state: initialStateType = initialState, action: AuthActionTypes): initialStateType => {
     switch (action.type) {
-        case 'SET-USER-DATA':
-            return {
-                ...state,
-                ...action.payload
-            }
+        case 'auth/SET-USER-DATA':
+            return {...state, ...action.payload}
         default:
             return state;
     }
@@ -28,39 +24,37 @@ export default authReducer;
 
 // actions
 export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean) => (
-    {type: 'SET-USER-DATA', payload: {userId, email, login, isAuth}} as const);
+    {type: 'auth/SET-USER-DATA', payload: {userId, email, login, isAuth}} as const);
 
 
 // thunks
-export const getAuthUserDataTC = () => (dispatch: Dispatch<AuthActionCreatorTypes>) => {
-    return authAPI.me().then(data => {
-        if (data.resultCode === 0) {
-            let {userId, email, login} = data.data;
-            dispatch(setAuthUserData(userId, email, login, true))
-        }
-    })
+export const getAuthUserDataTC = (): AppThunk => async (dispatch) => {
+    const data = await authAPI.me();
+
+    if (data.resultCode === ResultCodesEnum.Success) {
+        let {userId, email, login} = data.data;
+        dispatch(setAuthUserData(userId, email, login, true))
+    }
 }
 
-export const loginTC = (email: string | null, password: string | null, rememberMe: boolean) => (dispatch: any) => {
-    authAPI.login(email, password, rememberMe)
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(getAuthUserDataTC())
-            } else {
-                let message = response.data.messages.length > 0 ? response.data.messages[0] : 'Some error';
-                dispatch(stopSubmit('login', {_error: message}))
-            }
-        })
+export const loginTC = (email: string | null, password: string | null, rememberMe: boolean): AppThunk => async (dispatch) => {
+    const response = await authAPI.login(email, password, rememberMe);
+
+    if (response.data.resultCode === ResultCodesEnum.Success) {
+        dispatch(getAuthUserDataTC())
+    } else {
+        let message = response.data.messages.length > 0 ? response.data.messages[0] : 'Some error';
+        dispatch(stopSubmit('login', {_error: message}))
+    }
 }
-export const logoutTC = () => (dispatch: Dispatch<AuthActionCreatorTypes>) => {
-    authAPI.logout()
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(setAuthUserData(null, null, null, false))
-            }
-        })
+export const logoutTC = (): AppThunk => async (dispatch) => {
+    const response = await authAPI.logout();
+
+    if (response.data.resultCode === ResultCodesEnum.Success) {
+        dispatch(setAuthUserData(null, null, null, false))
+    }
 }
 
 // types
 export type initialStateType = typeof initialState;
-export type AuthActionCreatorTypes = ReturnType<typeof setAuthUserData>
+export type AuthActionTypes = ReturnType<typeof setAuthUserData>
