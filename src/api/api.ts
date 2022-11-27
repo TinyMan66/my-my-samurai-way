@@ -21,9 +21,9 @@ export const usersAPI = {
     follow(id: number = 1) {
         return instance.post<ResponseType>(`follow/${id}`)
     },
-    getUserProfile(userId: number) {
+    getUserProfile(id: number) {
         console.warn('Obsolete method! Please use the profileAPI object.')
-        return profileAPI.getUserProfile(userId);
+        return profileAPI.getUserProfile(id);
     },
 }
 
@@ -37,7 +37,6 @@ export const profileAPI = {
         return instance.get(`profile/status/` + userId);
     },
     updateStatus(status: string) {
-        debugger
         return instance.put<ResponseType>(`profile/status`, {status: status});
     },
 }
@@ -62,13 +61,11 @@ type ResponseType<T = {}, RC = ResultCodesEnum> = {
     messages: Array<string>
     resultCode: RC
 }
-
 export type meResponseDataType = {
     userId: number | null
     email: string | null
     login: string | null
 }
-
 export type loginResponseDataType = {
     userId: number
 }
@@ -77,4 +74,7 @@ export type loginResponseDataType = {
 export enum ResultCodesEnum {
     Success = 0,
     Error = 1
+}
+export enum ResultCodeForCaptcha {
+    CaptchaIsRequired = 10
 }
