@@ -5,7 +5,7 @@ import {required} from "../../utils/validators/validators";
 import {connect} from "react-redux";
 import {loginTC} from "../../redux/auth-reducer";
 import {Redirect} from "react-router-dom";
-import {AppStateType} from "../../redux/redux-store";
+import {AppStateType} from "../../redux/store";
 import style from "../common/FormsControls/FormsControls.module.css"
 
 const mapStateToProps = (state: AppStateType): mapStatePropsType => ({

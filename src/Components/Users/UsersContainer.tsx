@@ -1,5 +1,5 @@
 import React from 'react';
-import {AppStateType} from "../../redux/redux-store";
+import {AppStateType} from "../../redux/store";
 import {
     follow,
     requestUsers,

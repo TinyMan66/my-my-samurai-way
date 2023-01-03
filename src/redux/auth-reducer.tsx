@@ -1,7 +1,7 @@
 import React from "react"
 import {authAPI, meResponseDataType, ResultCodesEnum} from "../api/api";
 import {stopSubmit} from "redux-form";
-import {AppThunk} from "./redux-store";
+import {AppThunk} from "./store";
 
 const initialState = {
     data: {

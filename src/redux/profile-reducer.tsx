@@ -1,6 +1,6 @@
 import React from 'react'
 import {profileAPI, ResultCodesEnum, usersAPI} from "../api/api";
-import {AppThunk} from "./redux-store";
+import {AppThunk} from "./store";
 
 const initialState = {
     posts: [

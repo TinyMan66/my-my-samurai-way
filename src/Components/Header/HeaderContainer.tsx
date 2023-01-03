@@ -2,7 +2,7 @@ import React from 'react';
 import {Header} from "./Header";
 import {logoutTC} from "../../redux/auth-reducer";
 import {connect} from "react-redux";
-import {AppStateType} from "../../redux/redux-store";
+import {AppStateType} from "../../redux/store";
 
 class HeaderContainer extends React.Component<AuthPropsType> {
 

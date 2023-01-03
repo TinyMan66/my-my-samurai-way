@@ -5,7 +5,7 @@ import {
     sendMessageActionCreator,
 } from "../../../redux/dialogs-reducer";
 import {connect} from "react-redux";
-import {AppStateType} from "../../../redux/redux-store";
+import {AppStateType} from "../../../redux/store";
 import {compose, Dispatch} from "redux";
 import {withAuthRedirect} from "../../../hoc/withAuthRedirect";
 

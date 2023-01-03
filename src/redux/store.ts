@@ -18,12 +18,10 @@ const rootReducer = combineReducers({
     app: appReducer
 });
 
-export type AppStateType = ReturnType<typeof rootReducer>;
-
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
+export type AppStateType = ReturnType<typeof rootReducer>;
 export type AppActionsType = AppActionTypes | DialogsActionTypes | ProfileActionTypes | UsersActionTypes | AuthActionTypes
-
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppStateType, unknown, AppActionsType>
 
 // @ts-ignore

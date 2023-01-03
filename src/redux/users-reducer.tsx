@@ -1,7 +1,7 @@
 import React from 'react'
 import {ResultCodesEnum, usersAPI} from "../api/api";
 import {Dispatch} from "redux";
-import {AppThunk} from "./redux-store";
+import {AppThunk} from "./store";
 
 
 let initialState = {

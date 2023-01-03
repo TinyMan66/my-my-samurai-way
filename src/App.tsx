@@ -14,7 +14,7 @@ import Login from "./Components/Login/Login";
 import {connect} from "react-redux";
 import {compose} from "redux";
 import {initializeAppTC} from "./redux/app-reducer";
-import {AppStateType} from "./redux/redux-store";
+import {AppStateType} from "./redux/store";
 import {Preloader} from "./Components/common/Preloader/Preloader";
 
 const mapStateToProps = (state: AppStateType): mapStatePropsType => {

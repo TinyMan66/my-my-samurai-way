@@ -1,6 +1,6 @@
 import React from "react";
 import {getAuthUserDataTC} from "./auth-reducer";
-import {AppThunk} from "./redux-store";
+import {AppThunk} from "./store";
 
 const INITIALIZED_SUCCESS = 'app/INITIALIZED-SUCCESS';
 
