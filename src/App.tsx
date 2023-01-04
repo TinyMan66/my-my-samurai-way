@@ -6,9 +6,7 @@ import {Music} from "./Components/Music/Music";
 import {Settings} from "./Components/Settings/Settings";
 import {Sidebar} from "./Components/Sidebar/Sidebar";
 import {BrowserRouter, Route, withRouter} from "react-router-dom";
-import {DialogsContainer} from "./Components/Dialogs/Message/DialogsContainer";
 import UsersContainer from "./Components/Users/UsersContainer";
-import ProfileContainer from "./Components/Profile/ProfileContainer";
 import HeaderContainer from "./Components/Header/HeaderContainer";
 import Login from "./Components/Login/Login";
 import {connect, Provider} from "react-redux";
@@ -16,6 +14,12 @@ import {compose} from "redux";
 import {initializeAppTC} from "./redux/app-reducer";
 import {AppStateType, store} from "./redux/store";
 import {Preloader} from "./Components/common/Preloader/Preloader";
+import {withSuspense} from "./hoc/withSuspense";
+
+//imported component without default
+const DialogsContainer = React.lazy(() => import("./Components/Dialogs/Message/DialogsContainer").then(module => ({default: module.DialogsContainer})));
+
+const ProfileContainer = React.lazy(() => import("./Components/Profile/ProfileContainer"));
 
 const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
@@ -38,12 +42,9 @@ class App extends React.Component<AppPropsType> {
                 <HeaderContainer/>
                 <Navbar/>
                 <div className='app-wrapper-content'>
-                    <Route path='/profile/:userId?' render={() =>
-                        <ProfileContainer/>}
+                    <Route path='/profile/:userId?' render={withSuspense(ProfileContainer)}
                     />
-                    <Route path='/dialogs' render={() =>
-                        <DialogsContainer/>
-                    }/>
+                    <Route path='/dialogs' render={withSuspense(DialogsContainer)}/>
                     <Route path='/users' render={() =>
                         <UsersContainer/>
                     }/>
