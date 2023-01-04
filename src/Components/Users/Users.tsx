@@ -6,10 +6,11 @@ import {User} from "./User";
 export const Users: React.FC<UsersPropsType> = (props) => {
     return (
         <div>
-            <Paginator totalUsersCount={props.totalUsersCount}
+            <Paginator totalItemsCount={props.totalUsersCount}
                        pageSize={props.pageSize}
                        onPageChange={props.onPageChange}
                        currentPage={props.currentPage}
+                       portionSize={10}
             />
             {
                 props.users.map(u => <User key={u.id} user={u}
