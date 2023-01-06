@@ -16,7 +16,7 @@ import {AppStateType, store} from "./redux/store";
 import {Preloader} from "./Components/common/Preloader/Preloader";
 import {withSuspense} from "./hoc/withSuspense";
 
-//imported component without default
+//imported component without default export
 const DialogsContainer = React.lazy(() => import("./Components/Dialogs/Message/DialogsContainer").then(module => ({default: module.DialogsContainer})));
 
 const ProfileContainer = React.lazy(() => import("./Components/Profile/ProfileContainer"));
