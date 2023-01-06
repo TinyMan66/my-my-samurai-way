@@ -8,7 +8,7 @@ import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 
 class ProfileContainer extends React.Component<PropsType> {
-    componentDidMount() {
+    refreshProfile () {
         let userId = this.props.match.params.userId;
         if (!userId) {
             userId = String(this.props.authorizedUserId);
@@ -19,6 +19,15 @@ class ProfileContainer extends React.Component<PropsType> {
 
         !isNaN(+userId) && this.props.getUserProfile(+userId);
         !isNaN(+userId) && this.props.getStatus(+userId);
+    }
+    componentDidMount() {
+        this.refreshProfile()
+    }
+
+    componentDidUpdate(prevProps: Readonly<PropsType>, prevState: Readonly<{}>, snapshot?: any) {
+       if (this.props.match.params.userId !== prevProps.match.params.userId) {
+            this.refreshProfile()
+        }
     }
 
     render() {
