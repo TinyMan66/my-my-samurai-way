@@ -2,6 +2,7 @@ import React from 'react'
 import {ResultCodesEnum, usersAPI} from "../api/api";
 import {Dispatch} from "redux";
 import {AppThunk} from "./store";
+import {PhotosType} from "./profile-reducer";
 
 
 let initialState = {
@@ -116,10 +117,7 @@ export type UnfollowSuccessType = ReturnType<typeof unfollowSuccess>
 export type FollowSuccessType = ReturnType<typeof followSuccess>
 export type UserType = {
     id: number
-    photos: {
-        small: string
-        large: string
-    }
+    photos: PhotosType
     followed: boolean
     name: string
     status: string

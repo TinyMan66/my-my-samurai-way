@@ -13,7 +13,7 @@ const initialState = {
     ] as Array<PostType>,
     newPostText: "",
     profile: {
-        //NaN and 0 - are not good, it must be null, but typeScript against it now - must be resolve!!!
+        //toDo NaN and 0 - are not good, it must be null, but typeScript against it now - must be resolve!!!
         userId: 0,
         lookingForAJob: false,
         lookingForAJobDescription: '',
@@ -64,6 +64,11 @@ const profileReducer = (state: initialStateType = initialState, action: ProfileA
                 ...state,
                 posts: state.posts.filter(p => p.id !== action.postId)
             }
+        case 'profile/SAVE-PHOTO-SUCCESS':
+            return {
+                ...state,
+                profile: {...state.profile, photos: action.photos}
+            }
         default:
             return state;
     }
@@ -82,6 +87,9 @@ export const setStatus = (status: string) => (
 
 export const deletePostActionCreator = (postId: number) => (
     {type: 'profile/DELETE-POST', postId} as const);
+
+export const savePhotoSuccess = (photos: PhotosType) => (
+    {type: 'profile/SAVE-PHOTO-SUCCESS', photos} as const);
 
 
 // thunks
@@ -108,6 +116,15 @@ export const updateStatus = (status: string): AppThunk => {
     }
 }
 
+export const savePhoto = (file: File): AppThunk => {
+    return async (dispatch) => {
+        const response = await profileAPI.savePhoto(file);
+        if (response.data.resultCode === ResultCodesEnum.Success) {
+            dispatch(savePhotoSuccess(response.data.data.photos))
+        }
+    }
+}
+
 // types
 export type initialStateType = typeof initialState;
 export type PostType = {
@@ -121,10 +138,11 @@ export type ProfileType = {
     lookingForAJobDescription: string
     fullName: string
     contacts: ContactsType
-    photos: {
-        small: string
-        large: string
-    }
+    photos: PhotosType
+};
+export type PhotosType = {
+    small: string
+    large: string
 };
 type ContactsType = {
     github: string
@@ -141,3 +159,4 @@ export type ProfileActionTypes =
     | ReturnType<typeof setUserProfile>
     | ReturnType<typeof setStatus>
     | ReturnType<typeof deletePostActionCreator>
+    | ReturnType<typeof savePhotoSuccess>

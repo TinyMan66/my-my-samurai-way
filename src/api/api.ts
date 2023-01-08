@@ -1,5 +1,5 @@
 import axios from "axios";
-import {ProfileType} from "../redux/profile-reducer";
+import {PhotosType, ProfileType} from "../redux/profile-reducer";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
@@ -19,7 +19,7 @@ export const usersAPI = {
         return instance.delete(`follow/${id}`)
     },
     follow(id: number = 1) {
-        return instance.post<ResponseType>(`follow/${id}`)
+        return instance.post<APIResponseType>(`follow/${id}`)
     },
     getUserProfile(id: number) {
         console.warn('Obsolete method! Please use the profileAPI object.')
@@ -30,25 +30,38 @@ export const usersAPI = {
 // profile
 export const profileAPI = {
     getUserProfile(userId: number) {
-        return instance.get<ProfileType>(`profile/`+ userId)
+        return instance.get<ProfileType>(`profile/` + userId)
             .then(response => (response.data));
     },
     getStatus(userId: number) {
-        return instance.get(`profile/status/` + userId);
+        return instance.get<string>(`profile/status/` + userId);
     },
     updateStatus(status: string) {
-        return instance.put<ResponseType>(`profile/status`, {status: status});
+        return instance.put<APIResponseType>(`profile/status`, {status: status});
+    },
+    savePhoto(photoFile: File) {
+        const formData = new FormData()
+        formData.append('image', photoFile)
+        return instance.put<APIResponseType<SavePhotoResponseDataType>>('profile/photo', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
     },
 }
 
 // auth
 export const authAPI = {
     me() {
-        return instance.get<ResponseType<meResponseDataType>>(`auth/me`)
+        return instance.get<APIResponseType<meResponseDataType>>(`auth/me`)
             .then(response => response.data);
     },
     login(email: string | null, password: string | null, rememberMe: boolean = false) {
-        return instance.post<ResponseType<loginResponseDataType, ResultCodesEnum>>(`auth/login`, {email, password, rememberMe});
+        return instance.post<APIResponseType<loginResponseDataType, ResultCodesEnum>>(`auth/login`, {
+            email,
+            password,
+            rememberMe
+        });
     },
     logout() {
         return instance.delete(`auth/login`);
@@ -56,7 +69,7 @@ export const authAPI = {
 }
 
 // types
-type ResponseType<T = {}, RC = ResultCodesEnum> = {
+type APIResponseType<T = {}, RC = ResultCodesEnum> = {
     data: T
     messages: Array<string>
     resultCode: RC
@@ -70,11 +83,16 @@ export type loginResponseDataType = {
     userId: number
 }
 
+export type SavePhotoResponseDataType = {
+    photos: PhotosType
+}
+
 // enums
 export enum ResultCodesEnum {
     Success = 0,
     Error = 1
 }
+
 export enum ResultCodeForCaptcha {
     CaptchaIsRequired = 10
 }
