@@ -3,6 +3,7 @@ import {ProfileType} from "../../../redux/profile-reducer";
 import {createField, Input, Textarea} from "../../common/FormsControls/FormsControls";
 import {InjectedFormProps, reduxForm} from "redux-form";
 import s from './ProfileInfo.module.css'
+import style from '../../common/FormsControls/FormsControls.module.css'
 
 const ProfileDataForm: React.FC<InjectedFormProps<ProfileFormDataType, ProfileDataFormPropsType> & ProfileDataFormPropsType> = ({
                                                                                                    handleSubmit,
@@ -14,6 +15,7 @@ const ProfileDataForm: React.FC<InjectedFormProps<ProfileFormDataType, ProfileDa
             <div>
                 <button>Save</button>
             </div>
+            {error && <div className={style.formSummaryError}>{error}</div>}
             <div>
                 <b>Full name: </b> {createField('Full Name', 'fullName', [], Input)}
             </div>
