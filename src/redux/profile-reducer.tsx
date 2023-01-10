@@ -1,6 +1,7 @@
 import React from 'react'
 import {profileAPI, ResultCodesEnum, usersAPI} from "../api/api";
 import {AppThunk} from "./store";
+import {stopSubmit} from "redux-form";
 
 const initialState = {
     posts: [
@@ -136,6 +137,10 @@ export const saveProfile = (profile: ProfileType): AppThunk => {
             } else {
                 throw new Error("userId can't be null")
             }
+        } else {
+            let message = response.data.messages.length > 0 ? response.data.messages[0] : 'Some error';
+            dispatch(stopSubmit('edit-profile', {_error: message}))
+            return Promise.reject(response.data.messages[0])
         }
     }
 }

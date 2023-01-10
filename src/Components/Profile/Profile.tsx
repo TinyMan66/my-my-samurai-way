@@ -19,5 +19,5 @@ export type ProfilePropsType = {
     status: string
     updateStatus: (status: string) => void
     savePhoto: (photo: File) => void
-    saveProfile: (profile: ProfileType) => void
+    saveProfile: (profile: ProfileType) => Promise<void>
 }

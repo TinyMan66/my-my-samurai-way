@@ -79,7 +79,7 @@ type mapDispatchPropsType = {
     getStatus: (userId: number) => void
     updateStatus: (status: string) => void
     savePhoto: (photo: File) => void
-    saveProfile: (profile: ProfileType) => void
+    saveProfile: (profile: ProfileType) => Promise<void>
 }
 type ProfileContainerPropsType = mapStatePropsType & mapDispatchPropsType;
 type PropsType = RouteComponentProps<PathParamsType> & ProfileContainerPropsType;
