@@ -15,6 +15,7 @@ const initialState = {
     profile: {
         //toDo NaN and 0 - are not good, it must be null, but typeScript against it now - must be resolve!!!
         userId: 0,
+        aboutMe: '',
         lookingForAJob: false,
         lookingForAJobDescription: '',
         fullName: '',
@@ -124,6 +125,20 @@ export const savePhoto = (file: File): AppThunk => {
         }
     }
 }
+export const saveProfile = (profile: ProfileType): AppThunk => {
+    return async (dispatch, getState) => {
+        const userId = getState().auth.data.userId
+        const response = await profileAPI.saveProfile(profile);
+
+        if (response.data.resultCode === ResultCodesEnum.Success) {
+            if (userId != null) {
+                dispatch(getUserProfile(userId))
+            } else {
+                throw new Error("userId can't be null")
+            }
+        }
+    }
+}
 
 // types
 export type initialStateType = typeof initialState;
@@ -134,6 +149,7 @@ export type PostType = {
 };
 export type ProfileType = {
     userId: number
+    aboutMe: string
     lookingForAJob: boolean
     lookingForAJobDescription: string
     fullName: string
@@ -144,7 +160,7 @@ export type PhotosType = {
     small: string
     large: string
 };
-type ContactsType = {
+export type ContactsType = {
     github: string
     vk: string
     facebook: string
