@@ -15,7 +15,7 @@ const ProfileDataForm: React.FC<InjectedFormProps<ProfileFormDataType, ProfileDa
             <div>
                 <button>Save</button>
             </div>
-            {error && <div className={style.formSummaryError}>{error}</div>}
+            { error && <div className={style.formSummaryError}>{error}</div> }
             <div>
                 <b>Full name: </b> {createField('Full Name', 'fullName', [], Input)}
             </div>

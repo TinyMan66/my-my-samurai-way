@@ -59,11 +59,12 @@ export const authAPI = {
         return instance.get<APIResponseType<meResponseDataType>>(`auth/me`)
             .then(response => response.data);
     },
-    login(email: string | null, password: string | null, rememberMe: boolean = false) {
-        return instance.post<APIResponseType<loginResponseDataType, ResultCodesEnum>>(`auth/login`, {
+    login(email: string | null, password: string | null, rememberMe: boolean = false, captcha: string | null) {
+        return instance.post<APIResponseType<loginResponseDataType, ResultCodesEnum & ResultCodeForCaptcha>>(`auth/login`, {
             email,
             password,
-            rememberMe
+            rememberMe,
+            captcha
         });
     },
     logout() {
@@ -71,8 +72,15 @@ export const authAPI = {
     },
 }
 
+// security
+export const securityAPI = {
+    getCaptchaUrl() {
+        return instance.get<captchaResponseDataType>(`security/get-captcha-url`)
+    },
+}
+
 // types
-type APIResponseType<T = {}, RC = ResultCodesEnum> = {
+type APIResponseType<T = {}, RC = ResultCodesEnum | ResultCodeForCaptcha> = {
     data: T
     messages: Array<string>
     resultCode: RC
@@ -88,6 +96,10 @@ export type loginResponseDataType = {
 
 export type SavePhotoResponseDataType = {
     photos: PhotosType
+}
+
+export type captchaResponseDataType = {
+    url: string | null
 }
 
 // enums
