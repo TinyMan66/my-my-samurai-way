@@ -10,7 +10,7 @@ const initialState = {
         login: ''
     } as meResponseDataType,
     isAuth: false,
-    captchaUrl: null
+    captcha: null as null | string
 }
 
 const authReducer = (state: initialStateType = initialState, action: AuthActionTypes): initialStateType => {

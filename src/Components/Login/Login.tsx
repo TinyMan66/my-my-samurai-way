@@ -10,7 +10,7 @@ import style from "../common/FormsControls/FormsControls.module.css"
 
 const mapStateToProps = (state: AppStateType): mapStatePropsType => ({
     isAuth: state.auth.isAuth,
-    captcha: state.auth.captchaUrl
+    captcha: state.auth.captcha
 })
 
 const LoginForm: React.FC<InjectedFormProps<FormDataType, LoginReduxFormPropsType> & LoginReduxFormPropsType> = ({handleSubmit, error, captcha}) => {
@@ -18,9 +18,10 @@ const LoginForm: React.FC<InjectedFormProps<FormDataType, LoginReduxFormPropsTyp
         <form onSubmit={handleSubmit}>
             {createField("Email", "email", [required], Input)}
             {createField("Password", "password", [required], Input, {type: "password"})}
-            {createField("", "rememberMe", [], Input, {type: "checkbox"}, "remember me")}
+            {createField(undefined, "rememberMe", [], Input, {type: "checkbox"}, "remember me")}
 
             {captcha && <img src={captcha} alt={'captcha symbols'}/>}
+            {captcha && createField("Symbols from image", "captcha", [required], Input, {})}
 
             {error && <div className={style.formSummaryError}>{error}</div>}
 
@@ -35,8 +36,7 @@ const LoginReduxForm = reduxForm<FormDataType, LoginReduxFormPropsType>({form: '
 
 const Login = (props: LoginPropsType) => {
     const onSubmit = (formData: FormDataType) => {
-        console.log(formData)
-        props.loginTC(formData.email, formData.password, formData.rememberMe, props.captcha)
+        props.loginTC(formData.email, formData.password, formData.rememberMe, formData.captcha)
     }
 
     if (props.isAuth) {
@@ -55,6 +55,7 @@ type FormDataType = {
     email: string | null
     password: string | null
     rememberMe: boolean
+    captcha: string | null
 }
 type mapStatePropsType = {
     isAuth: boolean,
