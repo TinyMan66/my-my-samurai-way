@@ -5,7 +5,7 @@ import {News} from "./Components/News/News";
 import {Music} from "./Components/Music/Music";
 import {Settings} from "./Components/Settings/Settings";
 import {Sidebar} from "./Components/Sidebar/Sidebar";
-import {HashRouter, Route, withRouter} from "react-router-dom";
+import {HashRouter, Redirect, Route, Switch, withRouter} from "react-router-dom";
 import UsersContainer from "./Components/Users/UsersContainer";
 import HeaderContainer from "./Components/Header/HeaderContainer";
 import Login from "./Components/Login/Login";
@@ -42,21 +42,26 @@ class App extends React.Component<AppPropsType> {
                 <HeaderContainer/>
                 <Navbar/>
                 <div className='app-wrapper-content'>
-                    <Route path='/profile/:userId?' render={withSuspense(ProfileContainer)}
-                    />
-                    <Route path='/dialogs' render={withSuspense(DialogsContainer)}/>
-                    <Route path='/users' render={() =>
-                        <UsersContainer/>
-                    }/>
-                    <Route path='/login' render={() =>
-                        <Login/>
-                    }/>
-                    <Route path='/news' render={News}/>
-                    <Route path='/music' render={Music}/>
-                    <Route path='/settings' render={Settings}/>
-                    <Route path='/sidebar' render={() =>
-                        <Sidebar/>
-                    }/>
+                    <Switch>
+                        <Route exact path='/' render={() => <Redirect to={'/profile'}/>}
+                        />
+                        <Route path='/profile/:userId?' render={withSuspense(ProfileContainer)}
+                        />
+                        <Route path='/dialogs' render={withSuspense(DialogsContainer)}/>
+                        <Route path='/users' render={() =>
+                            <UsersContainer/>
+                        }/>
+                        <Route path='/login' render={() =>
+                            <Login/>
+                        }/>
+                        <Route path='/news' render={News}/>
+                        <Route path='/music' render={Music}/>
+                        <Route path='/settings' render={Settings}/>
+                        <Route path='/sidebar' render={() =>
+                            <Sidebar/>
+                        }/>
+                        <Route path='*' render={() => <div>404 PAGE NOT FOUND</div>}/>
+                    </Switch>
                 </div>
             </div>
         )
