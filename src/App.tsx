@@ -11,7 +11,7 @@ import HeaderContainer from "./Components/Header/HeaderContainer";
 import Login from "./Components/Login/Login";
 import {connect, Provider} from "react-redux";
 import {compose} from "redux";
-import {initializeAppTC} from "./redux/app-reducer";
+import {globalErrorTC, initializeAppTC} from "./redux/app-reducer";
 import {AppStateType, store} from "./redux/store";
 import {Preloader} from "./Components/common/Preloader/Preloader";
 import {withSuspense} from "./hoc/withSuspense";
@@ -23,13 +23,25 @@ const ProfileContainer = React.lazy(() => import("./Components/Profile/ProfileCo
 
 const mapStateToProps = (state: AppStateType): mapStatePropsType => {
     return {
-        initialized: state.app.initialized
+        initialized: state.app.initialized,
+        globalError: state.app.globalError
     }
 }
 
 class App extends React.Component<AppPropsType> {
+    catchAllUnhandledErrors = (promiseRejectionEvent: Event) => {
+        //alert('Some error occurred!');
+        console.error(promiseRejectionEvent);
+        this.props.globalErrorTC(promiseRejectionEvent.type)
+    }
+
     componentDidMount() {
         this.props.initializeAppTC()
+        window.addEventListener('unhandledrejection', this.catchAllUnhandledErrors)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('unhandledrejection', this.catchAllUnhandledErrors)
     }
 
     render() {
@@ -39,6 +51,7 @@ class App extends React.Component<AppPropsType> {
 
         return (
             <div className='app-wrapper'>
+                {this.props.globalError && <div>{this.props.globalError}</div>}
                 <HeaderContainer/>
                 <Navbar/>
                 <div className='app-wrapper-content'>
@@ -70,7 +83,7 @@ class App extends React.Component<AppPropsType> {
 
 const AppContainer = compose<React.ComponentType>(
     withRouter,
-    connect(mapStateToProps, {initializeAppTC}))(App);
+    connect(mapStateToProps, {initializeAppTC, globalErrorTC}))(App);
 
 const SocialNetworkApp = () => {
     return <HashRouter>
@@ -85,8 +98,10 @@ export default SocialNetworkApp
 // types
 type mapDispatchPropsType = {
     initializeAppTC: () => void
+    globalErrorTC: (globalError: null | string) => void
 }
 type mapStatePropsType = {
     initialized: boolean
+    globalError: null | string
 }
 export type AppPropsType = mapDispatchPropsType & mapStatePropsType;
