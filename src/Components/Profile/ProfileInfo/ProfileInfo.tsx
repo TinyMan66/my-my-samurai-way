@@ -31,7 +31,9 @@ export const ProfileInfo = ({isOwner, profile, status, updateStatus, savePhoto, 
                     <div className={s.descriptionBlock}>
                         <img src={profile.photos.large || userIcon} alt={"profile photo "} className={s.mainPhoto}/>
                         {isOwner && <input type="file" accept=".jpg, .jpeg, .png" onChange={onMainPhotoSelected}/>}
-                        <ProfileStatusWithHooks status={status} updateStatus={updateStatus}/>
+                        <div>
+                            <b>Status: </b><ProfileStatusWithHooks status={status} updateStatus={updateStatus}/>
+                        </div>
 
                         {editMode
                             ? <ProfileDataForm initialValues={profile} onSubmit={onSubmit} profile={profile}/>
