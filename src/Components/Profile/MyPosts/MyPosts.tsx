@@ -13,12 +13,11 @@ type FormDataType = {
 const maxLength10 = maxLengthCreator(10);
 
 const AddNewPostForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
-    return(
+    return (
         <form onSubmit={props.handleSubmit}>
             <Field component={Textarea} name="newPostText"
-            placeholder="Post message" validate={[required, maxLength10]}/>
+                   placeholder="Post message" validate={[required, maxLength10]}/>
             <button>Add post</button>
-            <button>Remove</button>
         </form>
     )
 }
