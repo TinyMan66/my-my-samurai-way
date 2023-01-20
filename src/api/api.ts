@@ -86,7 +86,7 @@ type APIResponseType<T = {}, RC = ResultCodesEnum | ResultCodeForCaptcha> = {
     resultCode: RC
 }
 export type meResponseDataType = {
-    userId: number | null
+    id: number | null
     email: string | null
     login: string | null
 }

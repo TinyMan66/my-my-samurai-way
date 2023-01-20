@@ -5,7 +5,7 @@ import {AppThunk} from "./store";
 
 const initialState = {
     data: {
-        userId: null,
+        id: null as number | null,
         email: '',
         login: ''
     } as meResponseDataType,
@@ -25,8 +25,13 @@ const authReducer = (state: initialStateType = initialState, action: AuthActionT
 export default authReducer;
 
 // actions
-export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean, captcha: string | null) => (
-    {type: 'auth/SET-USER-DATA', payload: {userId, email, login, isAuth, captcha}} as const);
+export const setAuthUserData = (id: number | null, email: string | null, login: string | null, isAuth: boolean, captcha: string | null) => (
+    {
+        type: 'auth/SET-USER-DATA', payload: {
+            data: {id, email, login},
+            isAuth, captcha
+        }
+    } as const);
 
 export const getCaptchaUrlSuccess = (captcha: string | null) => (
     {type: 'auth/GET-CAPTCHA-URL-SUCCESS', payload: {captcha}} as const);
@@ -37,8 +42,8 @@ export const getAuthUserDataTC = (): AppThunk => async (dispatch) => {
     const data = await authAPI.me();
 
     if (data.resultCode === ResultCodesEnum.Success) {
-        let {userId, email, login} = data.data;
-        dispatch(setAuthUserData(userId, email, login, true, null))
+        let {id, email, login} = data.data;
+        dispatch(setAuthUserData(id, email, login, true, null))
     }
 }
 

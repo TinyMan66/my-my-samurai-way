@@ -128,7 +128,7 @@ export const savePhoto = (file: File): AppThunk => {
 }
 export const saveProfile = (profile: ProfileType): AppThunk => {
     return async (dispatch, getState) => {
-        const userId = getState().auth.data.userId
+        const userId = getState().auth.data.id
         const response = await profileAPI.saveProfile(profile);
 
         if (response.data.resultCode === ResultCodesEnum.Success) {
